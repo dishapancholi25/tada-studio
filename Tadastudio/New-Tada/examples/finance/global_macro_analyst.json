@@ -1,0 +1,142 @@
+{
+  "name": "Global Macro Analyst",
+  "description": "A global macro analyst that examines worldwide economic events and their impact on investments, with special attention to product types and asset classes. Connects global trends to specific fund contexts with careful sourcing.",
+  "system_prompt": "You analyze global macro influences, especially as they pertain to investment products and asset classes. Your role is to connect global events to specific investment contexts.\n\nWORKFLOW:\n1. FIRST use the 'retrieve' tool to search all uploaded documents and user notes for global macro events and their impact on the fund, product type, and asset class during the report date\n2. Summarize the major global events affecting the market\n3. Prioritize information from uploaded documents and notes\n4. Relate these to their potential impact on the fund with attention to product type and asset class\n5. If you can't find fund- or product/asset-class-specific links in uploaded files, then use web search for general/global context\n6. Explain why global context is relevant to the fund and its investment profile\n7. Always cite sources\n\nQUALITY STANDARDS:\n- Major global events impacting the market are described\n- Impact of global events on the local market, product type, and asset class is explained\n- Relevant statistics or indices are mentioned\n- Sources from both tools should be cited. Source MUST be a full URL for web and full file path for retrieval\n- State explicitly if information is fund-specific, product/asset-class-specific, or global",
+  "llm_config": {
+    "provider": "azure_openai",
+    "model_name": "gpt-4.1-nano",
+    "temperature": 0.3
+  },
+  "agent_config": {
+    "agent_type": "react",
+    "max_iterations": 15,
+    "tools": [
+      "document_search",
+      "web_search"
+    ],
+    "document_search_enabled": true,
+    "search_k": 5,
+    "citation_format": "structured",
+    "structured_outputs": [
+      {
+        "type": "object",
+        "properties": {
+          "global_events_summary": {
+            "type": "string",
+            "description": "Summary of major global events affecting the market during the report period"
+          },
+          "market_impact": {
+            "type": "object",
+            "properties": {
+              "fund_specific_impact": {
+                "type": "string",
+                "description": "How global events specifically impact the fund"
+              },
+              "product_type_impact": {
+                "type": "string",
+                "description": "Impact on the specific product type"
+              },
+              "asset_class_impact": {
+                "type": "string",
+                "description": "Impact on the relevant asset class"
+              },
+              "local_market_impact": {
+                "type": "string",
+                "description": "How global events affect the local market"
+              }
+            },
+            "required": [
+              "fund_specific_impact",
+              "product_type_impact",
+              "asset_class_impact",
+              "local_market_impact"
+            ]
+          },
+          "key_statistics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "indicator": {
+                  "type": "string",
+                  "description": "Name of the statistic or index"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Current or relevant value"
+                },
+                "context": {
+                  "type": "string",
+                  "description": "Why this statistic is relevant"
+                }
+              },
+              "required": [
+                "indicator",
+                "value",
+                "context"
+              ]
+            },
+            "description": "Relevant statistics, indices, or economic indicators"
+          },
+          "information_scope": {
+            "type": "object",
+            "properties": {
+              "fund_specific_sources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sources providing fund-specific information (full file paths)"
+              },
+              "product_asset_class_sources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sources for product type and asset class information (URLs or file paths)"
+              },
+              "global_context_sources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Sources for general/global context (URLs)"
+              }
+            },
+            "required": [
+              "fund_specific_sources",
+              "product_asset_class_sources",
+              "global_context_sources"
+            ]
+          },
+          "relevance_explanation": {
+            "type": "string",
+            "description": "Explanation of why the global context is relevant to the fund and its investment profile"
+          }
+        },
+        "required": [
+          "global_events_summary",
+          "market_impact",
+          "key_statistics",
+          "information_scope",
+          "relevance_explanation"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "category": [
+      "Finance",
+      "Research"
+    ],
+    "tags": [
+      "macro-economics",
+      "global-markets",
+      "geopolitics",
+      "market-impact",
+      "analysis"
+    ],
+    "complexity": "intermediate",
+    "icon_color": "orange"
+  }
+}

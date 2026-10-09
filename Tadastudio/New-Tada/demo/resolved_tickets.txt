@@ -1,0 +1,275 @@
+# Ticket #45821 - Error 502 on Checkout Page
+**Date Resolved:** 2024-10-15
+**Category:** payment_system_outage
+**Urgency:** 5
+**Customer:** GlobalRetail Inc
+**Plan:** Enterprise Plus
+
+## Issue Description
+Customer reported Error 502 appearing on checkout page, preventing all payment processing. Multiple customers affected, significant revenue impact.
+
+## Root Cause
+Load balancer configuration issue after recent deployment causing timeout on payment gateway connections.
+
+## Resolution Steps
+1. Immediately rolled back load balancer configuration to previous version
+2. Increased timeout settings from 30s to 60s for payment gateway endpoints
+3. Implemented health check monitoring specifically for payment service
+4. Added automatic failover to backup payment gateway
+
+## Customer Communication
+"We've identified and resolved the issue with your checkout system. The error was caused by a configuration issue that has been corrected. We've also implemented additional monitoring to prevent this from recurring. A service credit for 2 days has been applied to your account."
+
+## Follow-up Actions
+- Service credit applied: $333 (2 days of service)
+- Incident post-mortem completed
+- Monitoring alerts enhanced
+
+
+# Ticket #45234 - Adding Team Members to Workspace
+**Date Resolved:** 2024-09-20
+**Category:** account_management
+**Urgency:** 2
+**Customer:** Creative Studios LLC
+**Plan:** Business
+
+## Issue Description
+Customer unable to find option to add new team members after dashboard redesign.
+
+## Resolution Steps
+1. Guided customer to Settings → Team Management (moved from old Users tab)
+2. Explained new bulk invite feature using CSV upload
+3. Clarified billing: new users are prorated for current month, then full price next cycle
+
+## Response Template
+"To add new team members in the updated dashboard:
+1. Click on Settings (gear icon in top right)
+2. Select 'Team Management' from the left sidebar
+3. Click 'Invite Members' button
+4. Enter email addresses or use 'Bulk Import' for multiple users
+
+Regarding billing: New users are charged on a prorated basis for the remainder of the current billing period. Starting next billing cycle, your plan will reflect the full monthly cost for all active users."
+
+## Notes
+Common issue after Q3 dashboard redesign - consider adding tutorial popup
+
+# Ticket #44890 - Payment Gateway Timeout Issues
+**Date Resolved:** 2024-08-30
+**Category:** payment_system_outage
+**Urgency:** 4
+**Customer:** FastCommerce
+**Plan:** Enterprise
+
+## Issue Description
+Intermittent 502 errors during high-traffic periods. Customer experiencing 15% cart abandonment.
+
+## Root Cause
+Payment service connection pool exhausted during peak times.
+
+## Resolution Steps
+1. Increased connection pool size from 100 to 500
+2. Implemented connection recycling every 300 seconds
+3. Added queue system for payment requests during peak load
+4. Set up auto-scaling for payment service pods
+
+## Customer Communication
+"We've resolved the intermittent payment issues you were experiencing. The system now handles peak traffic with improved connection management and auto-scaling."
+
+## Preventive Measures
+- Load testing now includes 3x normal peak traffic
+- Monitoring dashboard created for connection pool metrics
+
+# Ticket #45567 - Bulk User Import Not Working
+**Date Resolved:** 2024-10-01
+**Category:** account_management
+**Urgency:** 3
+**Customer:** TechStartup Inc
+**Plan:** Business
+
+## Issue Description
+CSV upload for bulk user import failing with unclear error message.
+
+## Root Cause
+CSV formatting issue - customer using semicolons instead of commas, and including headers in wrong format.
+
+## Resolution Steps
+1. Provided correct CSV template
+2. Explained required format: email,firstname,lastname,role
+3. Added data validation to provide clearer error messages
+4. Successfully imported 25 users for customer
+
+## Response Template
+"For bulk user import, please ensure your CSV follows this format:
+- Headers: email,firstname,lastname,role
+- No spaces after commas
+- Roles must be: admin, editor, or viewer
+- Maximum 100 users per import
+
+Download our CSV template from Settings → Team Management → 'Download Template'"
+
+# Ticket #43210 - How to Check User Billing
+**Date Resolved:** 2024-07-15
+**Category:** account_management
+**Urgency:** 1
+**Customer:** Design Agency Pro
+**Plan:** Business
+
+## Issue Description
+Customer wanted to understand how adding/removing users affects their bill.
+
+## Resolution
+"User billing works as follows:
+- Adding users: Prorated charge for current month, full charge starting next cycle
+- Removing users: Immediate access removal, prorated credit applied to next invoice
+- View current usage: Billing → Usage Details → Active Users
+- All changes reflected in Billing → Upcoming Invoice"
+
+## Notes
+Feature request submitted for real-time billing calculator
+
+
+# Ticket #46123 - Enterprise Payment Gateway Down - Critical Outage
+**Date Resolved:** 2024-11-10
+**Category:** payment_system_outage
+**Urgency:** 5
+**Customer:** MegaStore Corp
+**Plan:** Enterprise Plus
+
+## Issue Description
+Complete payment system failure showing Error 502. Customer reported $50K/hour in lost revenue. Affecting all checkout attempts across multiple regions.
+
+## Root Cause
+Primary payment processor API experiencing DDoS attack, overwhelming our retry logic and causing cascading failures.
+
+## Resolution Steps
+1. Immediately switched to secondary payment processor (Stripe fallback)
+2. Implemented circuit breaker pattern to prevent cascade
+3. Reduced retry attempts from 5 to 2 with exponential backoff
+4. Added DDoS protection layer at API gateway level
+
+## Customer Communication
+"We've immediately resolved the payment processing issue by activating our backup payment system. All transactions are now processing normally. We're applying a service credit of one week to your account for this disruption. Our engineering team has implemented additional safeguards to prevent similar issues."
+
+## Follow-up Actions
+- Service credit applied: $1,250 (1 week of service)
+- Executive escalation meeting scheduled
+- Infrastructure hardening project initiated
+
+
+# Ticket #45901 - Can't See New Team Members After Adding
+**Date Resolved:** 2024-10-25
+**Category:** account_management
+**Urgency:** 2
+**Customer:** Digital Innovations Ltd
+**Plan:** Business
+
+## Issue Description
+Customer successfully added team members but they don't appear in the team list. Invited users also not receiving invitation emails.
+
+## Root Cause
+Email domain was flagged by spam filter, preventing invitation delivery. UI wasn't showing pending invitations properly.
+
+## Resolution Steps
+1. Whitelisted customer's email domain in our mail service
+2. Resent all pending invitations manually
+3. Enabled "Show Pending Invitations" toggle in Team Management
+4. Verified all 7 new members received invitations
+
+## Response Template
+"The issue with team member invitations has been resolved. Your email domain was being filtered, which we've now corrected. To view pending invitations:
+1. Go to Settings → Team Management
+2. Toggle 'Show Pending Invitations' to ON
+3. You'll see all members awaiting acceptance
+
+All invitation emails have been resent and should arrive within 5 minutes."
+
+## Notes
+Added domain whitelist check to invitation flow
+
+
+# Ticket #44567 - Dashboard Won't Load After Login
+**Date Resolved:** 2024-08-12
+**Category:** technical_support
+**Urgency:** 4
+**Customer:** Analytics Pro Inc
+**Plan:** Enterprise
+
+## Issue Description
+Customer and their entire team unable to access dashboard after login. Page shows blank white screen. Business operations blocked.
+
+## Root Cause
+Customer's account had custom dashboard widgets that were incompatible with new frontend deployment.
+
+## Resolution Steps
+1. Rolled back customer to previous dashboard version temporarily
+2. Cleared corrupted widget cache for account
+3. Migrated custom widgets to new format
+4. Successfully upgraded to new dashboard
+
+## Customer Communication
+"We've resolved the dashboard access issue. There was a compatibility problem with your custom widgets which has been fixed. Your team should now have full access with all custom configurations preserved."
+
+## Technical Notes
+- Added backwards compatibility layer for custom widgets
+- Migration script created for similar accounts
+
+
+# Ticket #46234 - Billing Shows Wrong User Count
+**Date Resolved:** 2024-11-05
+**Category:** account_management
+**Urgency:** 3
+**Customer:** StartupXYZ
+**Plan:** Business
+
+## Issue Description
+Customer claims being charged for 25 users but only has 18 active. Threatening to cancel due to overcharging.
+
+## Investigation Results
+Found 7 deactivated users still counting toward billing due to grace period policy not being properly applied.
+
+## Resolution Steps
+1. Audited all users and their status
+2. Properly deactivated users not logged in for 30+ days
+3. Applied retroactive credit for 3 months of overcharge
+4. Fixed grace period calculation bug
+
+## Customer Communication
+"You were absolutely right about the user count discrepancy. We found 7 inactive users incorrectly included in your billing. We've corrected this and applied a credit of $209.30 for the past 3 months. Your current active user count is now correctly showing as 18."
+
+## Follow-up
+- Credit applied: $209.30
+- Monthly billing reduced from $497 to $358
+- User audit script now runs weekly
+
+
+# Ticket #45444 - API Rate Limiting Too Aggressive
+**Date Resolved:** 2024-09-30
+**Category:** technical_support
+**Urgency:** 3
+**Customer:** DataSync Solutions
+**Plan:** Enterprise
+
+## Issue Description
+Customer's integration failing due to 429 (Too Many Requests) errors. Claims they're well within their plan limits.
+
+## Root Cause
+Rate limiter was counting failed requests toward limit, causing legitimate retry attempts to be blocked.
+
+## Resolution Steps
+1. Increased customer's rate limit temporarily from 1000 to 2000 requests/minute
+2. Fixed rate limiter to only count successful requests
+3. Implemented separate retry bucket with higher limits
+4. Added rate limit headers to all responses for transparency
+
+## Customer Communication
+"We've identified and fixed the rate limiting issue. Failed requests no longer count toward your limit, and retry attempts now have a separate, higher limit. Your current limits:
+- Standard requests: 1000/minute
+- Retry requests: 500/minute
+- Burst allowance: 2000 requests
+
+Rate limit info is now included in all API response headers."
+
+## Technical Implementation
+- X-RateLimit-Limit header added
+- X-RateLimit-Remaining header added
+- X-RateLimit-Reset header added

@@ -1,0 +1,24 @@
+name: Ruff
+
+permissions:
+  contents: read
+
+on:
+  push:
+    paths:
+      - 'backend/**/*.py'   # any Python changes on any branch
+  pull_request:
+    branches:
+      - main        # run for *all* PRs into main, regardless of file changes
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          src: "./"
+      - run: ruff check --fix
+      - run: ruff format

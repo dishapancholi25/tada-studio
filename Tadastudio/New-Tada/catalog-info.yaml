@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  description: Low Code designer for AI agents
+  name: agentic-studio
+  annotations:
+    backstage.io/techdocs-ref: dir:.  
+  tags:
+  - kubernetes
+  - ai
+  - agentic
+  - python
+  - react
+  - phoenix
+  title: Agentic Studio
+spec:
+  lifecycle: incubating
+  owner: group:default/ai-australia
+  system: system:default/agentic-studio
+  type: website

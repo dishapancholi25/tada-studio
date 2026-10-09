@@ -1,0 +1,43 @@
+FROM node:24-bookworm
+
+WORKDIR /app
+
+# Install CA tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps && \
+    npm cache clean --force
+
+# Copy custom CA certificates
+COPY certs/*.cer /usr/local/share/ca-certificates/
+COPY certs/*.p7b /usr/local/share/ca-certificates/
+COPY certs/*.crt /usr/local/share/ca-certificates/
+COPY certs/*.pem /usr/local/share/ca-certificates/
+
+# Register the certificates
+RUN update-ca-certificates
+
+# (Optional but recommended for Node.js TLS)
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+
+# Copy source files
+COPY . .
+
+# Set backend URL for development
+ARG BACKEND_URL=http://10.226.36.5:8880
+ENV BACKEND_URL=${BACKEND_URL}
+
+# Build the application
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Default to dev mode (overridden by docker-compose)
+CMD ["npm", "run", "dev"]

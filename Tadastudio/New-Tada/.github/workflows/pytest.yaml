@@ -1,0 +1,94 @@
+name: PyTest
+
+permissions:
+  contents: read
+
+on:
+  push:
+    paths:
+      - 'backend/**/*.py'   # any Python changes on any branch
+      - 'backend/pyproject.toml'
+      - 'backend/uv.lock'
+      - 'pytest.ini'
+      - '.github/workflows/pytest.yaml'  # re-run when workflow itself changes
+  pull_request:
+    branches:
+      - main        # run for *all* PRs into main, regardless of file changes
+  workflow_call:
+    inputs:
+      python_versions:
+        type: string
+        description: 'JSON array of Python versions to test, e.g. ["3.11", "3.12"]'
+        default: '["3.11"]'  # Match production version (backend/Dockerfile uses 3.11)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: langgraph_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(inputs.python_versions || '["3.11"]') }}
+
+    env:
+      # Database configuration (service container)
+      KEY_POSTGRES_HOST: localhost
+      KEY_POSTGRES_PORT: 5432
+      KEY_POSTGRES_USER: postgres
+      KEY_POSTGRES_PASSWORD: postgres
+      KEY_POSTGRES_DBNAME: langgraph_test
+      KEY_POSTGRES_SSLMODE: disable
+      # Azure OpenAI configuration (from secrets)
+      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+      AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+      AZURE_OPENAI_DEPLOYMENT_NAME: ${{ secrets.AZURE_OPENAI_DEPLOYMENT_NAME }}
+      AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+      # Encryption key for credential storage (valid Fernet key for tests)
+      CREDENTIAL_ENCRYPTION_KEY: "w7tdjov04bjRaLnTXM88Oj-IrH8uXRW98xMYIz_YRYw="
+      # Skip auth for testing
+      SKIP_AUTH: "true"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          uv sync --group test
+
+      - name: Run tests with pytest and coverage
+        working-directory: backend
+        run: |
+          uv run pytest tests -v -s --tb=short --disable-warnings -m "not slow" --cov=backend --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false

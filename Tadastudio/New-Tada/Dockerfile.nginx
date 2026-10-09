@@ -1,0 +1,5 @@
+# Dockerfile.nginx
+FROM nginx:1.27
+# Clear default conf to avoid collisions
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf

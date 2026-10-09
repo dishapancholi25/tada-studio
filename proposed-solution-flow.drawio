@@ -1,0 +1,191 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="proposed-flow" name="Proposed Solution Flow">
+    <mxGraphModel dx="1720" dy="1002" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1965" pageHeight="820" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dce9f8;strokeColor=#a9c6e8;strokeWidth=2;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;arcSize=12;" value="Proposed Solution Flow – Azure Blob Storage Access Control&lt;br&gt;(Managed Identity + RBAC)" vertex="1">
+          <mxGeometry height="90" width="1000" x="480" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="col1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dce9f8;strokeColor=#a9c6e8;strokeWidth=2;verticalAlign=top;fontSize=18;fontStyle=1;spacingTop=10;arcSize=6;" value="Client / Caller" vertex="1">
+          <mxGeometry height="595" width="215" x="10" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="col2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecdff5;strokeColor=#c9a6dd;strokeWidth=2;verticalAlign=top;fontSize=18;fontStyle=1;spacingTop=10;arcSize=6;" value="Ingress + OAuth2 Proxy" vertex="1">
+          <mxGeometry height="595" width="310" x="365" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="col3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d8eef8;strokeColor=#a3cfe3;strokeWidth=2;verticalAlign=top;fontSize=18;fontStyle=1;spacingTop=10;arcSize=6;" value="Tada Studio Backend (AKS Pod)" vertex="1">
+          <mxGeometry height="595" width="410" x="765" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="col4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecd2;strokeColor=#eec384;strokeWidth=2;verticalAlign=top;fontSize=18;fontStyle=1;spacingTop=10;arcSize=6;" value="Azure Identity &amp;amp; RBAC" vertex="1">
+          <mxGeometry height="595" width="370" x="1235" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="col5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d9f0e3;strokeColor=#a3d9b8;strokeWidth=2;verticalAlign=top;fontSize=18;fontStyle=1;spacingTop=10;arcSize=6;" value="Azure Blob Storage (Storage Account)" vertex="1">
+          <mxGeometry height="595" width="325" x="1625" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#a9c6e8;strokeWidth=1;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="490" width="185" x="25" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_user_ic" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#3f7fbf;strokeColor=#3f7fbf;" value="" vertex="1">
+          <mxGeometry height="58" width="42" x="97" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_user_lbl" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=15;" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;(Tada Studio UI)" vertex="1">
+          <mxGeometry height="45" width="175" x="35" y="292" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_gear_ic" parent="1" style="shape=mxgraph.basic.gear;whiteSpace=wrap;html=1;fillColor=#6b6b6b;strokeColor=#6b6b6b;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="98" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_gear_lbl" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=15;" value="&lt;b&gt;Other services&lt;/b&gt;&lt;br&gt;(e.g., Workflow)" vertex="1">
+          <mxGeometry height="50" width="175" x="35" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_ingress" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#ffffff;strokeColor=#c9a6dd;strokeWidth=1.5;fontSize=16;arcSize=8;" value="&lt;b&gt;Ingress&lt;/b&gt;&lt;br&gt;(routes request)" vertex="1">
+          <mxGeometry height="120" width="260" x="390" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_oauth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f9d7e2;strokeColor=#c2185b;strokeWidth=1.5;fontSize=16;arcSize=8;" value="&lt;b&gt;OAuth2 Proxy&lt;/b&gt;&lt;br&gt;(authenticates request)" vertex="1">
+          <mxGeometry height="120" width="260" x="390" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_join" edge="1" parent="1" source="c2_ingress" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#9c4dbf;" target="c2_oauth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_wi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdf3d0;strokeColor=#c9a227;strokeWidth=1.5;fontSize=15;arcSize=8;" value="&lt;b&gt;AKS Workload Identity&lt;/b&gt;&lt;br&gt;(ServiceAccount → Managed Identity)" vertex="1">
+          <mxGeometry height="90" width="350" x="795" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_api_group" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f6ea;strokeColor=#7cc596;strokeWidth=1.5;verticalAlign=top;arcSize=6;" value="" vertex="1">
+          <mxGeometry height="350" width="350" x="795" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_api_lbl" parent="1" style="text;html=1;align=left;verticalAlign=top;fontSize=15;fontStyle=1;" value="Tada Studio API" vertex="1">
+          <mxGeometry height="26" width="250" x="810" y="326" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_sub1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7cc596;strokeWidth=1;fontSize=14;arcSize=10;" value="&lt;b&gt;Upload document API&lt;/b&gt;" vertex="1">
+          <mxGeometry height="55" width="325" x="810" y="358" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_sub2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7cc596;strokeWidth=1;fontSize=14;arcSize=10;" value="&lt;b&gt;Presigned URL API&lt;/b&gt;&lt;br&gt;/api/http-execution/&lt;br&gt;presigned-url/{document_id}" vertex="1">
+          <mxGeometry height="85" width="325" x="810" y="428" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_sub3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#7cc596;strokeWidth=1;fontSize=14;arcSize=10;" value="&lt;b&gt;Blob Service Client&lt;/b&gt;&lt;br&gt;(Managed Identity)" vertex="1">
+          <mxGeometry height="65" width="325" x="810" y="528" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_wi_join" edge="1" parent="1" source="c3_wi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#c9a227;" target="c3_api_group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_entra_ic" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=strokeColor;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;shape=image;image=img/lib/azure2/identity/Azure_Active_Directory.svg;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="1385" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_entra_lbl" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=15;" value="&lt;b&gt;Microsoft Entra ID&lt;/b&gt;&lt;br&gt;(Managed Identity)" vertex="1">
+          <mxGeometry height="45" width="330" x="1255" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_rbac_group" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#fff8ea;strokeColor=#eec384;strokeWidth=1.5;fontSize=15;fontStyle=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;arcSize=6;" value="RBAC Roles (on Blob Storage)" vertex="1">
+          <mxGeometry height="220" width="330" x="1255" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_role1_ic" parent="1" style="shape=mxgraph.basic.key;whiteSpace=wrap;html=1;fillColor=#e0a800;strokeColor=#a87a00;rotation=45;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="1270" y="365" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_role1_lbl" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="&lt;b&gt;Storage Blob Data Contributor&lt;/b&gt;&lt;br&gt;(container scope recommended)" vertex="1">
+          <mxGeometry height="46" width="260" x="1315" y="358" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_role2_ic" parent="1" style="shape=mxgraph.basic.key;whiteSpace=wrap;html=1;fillColor=#e0a800;strokeColor=#a87a00;rotation=45;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="1270" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_role2_lbl" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="&lt;b&gt;Storage Blob Delegator&lt;/b&gt;&lt;br&gt;(for User Delegation Key&lt;br&gt;when using container scope)" vertex="1">
+          <mxGeometry height="65" width="260" x="1315" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_storage_ic" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;fillColor=strokeColor;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;shape=image;image=img/lib/azure2/storage/Storage_Accounts.svg;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="1755" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_container_group" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#ffffff;strokeColor=#a3d9b8;strokeWidth=1.5;fontSize=15;fontStyle=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;arcSize=6;" value="Document Container (pre-created)" vertex="1">
+          <mxGeometry height="330" width="280" x="1650" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_doc1_ic" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#3f7fbf;strokeColor=#2c5a8a;" value="" vertex="1">
+          <mxGeometry height="38" width="30" x="1668" y="365" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_doc1_lbl" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="document-1.pdf" vertex="1">
+          <mxGeometry height="28" width="200" x="1710" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_doc2_ic" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#3f7fbf;strokeColor=#2c5a8a;" value="" vertex="1">
+          <mxGeometry height="38" width="30" x="1668" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_doc2_lbl" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="document-2.pdf" vertex="1">
+          <mxGeometry height="28" width="200" x="1710" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_doc3_lbl" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;" value="…" vertex="1">
+          <mxGeometry height="28" width="200" x="1668" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#1c6dbf;fontSize=13;align=center;verticalAlign=bottom;fontColor=#1c6dbf;" value="API request&lt;br&gt;(upload / presigned-url)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="225" y="295" as="sourcePoint" />
+            <mxPoint x="390" y="295" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1c6dbf;strokeColor=#1c6dbf;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="1" vertex="1">
+          <mxGeometry height="28" width="28" x="293" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#9c4dbf;fontSize=13;align=left;verticalAlign=bottom;fontColor=#9c4dbf;" value="Authenticated request">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="460" />
+              <mxPoint x="720" y="385" />
+            </Array>
+            <mxPoint x="650" y="460" as="sourcePoint" />
+            <mxPoint x="795" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#9c4dbf;strokeColor=#9c4dbf;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="2" vertex="1">
+          <mxGeometry height="28" width="28" x="700" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e3a" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#1c6dbf;fontSize=13;align=left;verticalAlign=top;fontColor=#1c6dbf;" value="Get Azure token (Workload Identity)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="535" />
+              <mxPoint x="1170" y="225" />
+            </Array>
+            <mxPoint x="1135" y="535" as="sourcePoint" />
+            <mxPoint x="1385" y="225" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1c6dbf;strokeColor=#1c6dbf;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="3" vertex="1">
+          <mxGeometry height="28" width="28" x="1156" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="e3b" edge="1" parent="1" style="html=1;rounded=0;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#9c4dbf;fontSize=13;align=left;verticalAlign=bottom;fontColor=#9c4dbf;" value="Access token (for Blob Storage)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1210" y="248" />
+              <mxPoint x="1210" y="558" />
+            </Array>
+            <mxPoint x="1385" y="248" as="sourcePoint" />
+            <mxPoint x="1135" y="558" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#1c6dbf;fontSize=13;align=center;verticalAlign=bottom;fontColor=#1c6dbf;" value="Upload blob (using Azure token)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1145" y="600" as="sourcePoint" />
+            <mxPoint x="1650" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1c6dbf;strokeColor=#1c6dbf;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="4" vertex="1">
+          <mxGeometry height="28" width="28" x="1280" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#2e8b57;fontSize=13;align=center;verticalAlign=bottom;fontColor=#2e8b57;" value="Generate User Delegation Key and create SAS URL">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1145" y="645" as="sourcePoint" />
+            <mxPoint x="1650" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2e8b57;strokeColor=#2e8b57;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="5" vertex="1">
+          <mxGeometry height="28" width="28" x="1280" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" style="html=1;rounded=0;endArrow=block;endFill=1;strokeWidth=2.5;strokeColor=#2e8b57;fontSize=13;align=center;verticalAlign=bottom;fontColor=#2e8b57;" value="Return SAS URL to client (for download)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1790" y="775" />
+              <mxPoint x="117" y="775" />
+            </Array>
+            <mxPoint x="1790" y="660" as="sourcePoint" />
+            <mxPoint x="117" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="n6" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2e8b57;strokeColor=#2e8b57;fontColor=#ffffff;fontStyle=1;fontSize=15;" value="6" vertex="1">
+          <mxGeometry height="28" width="28" x="850" y="761" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

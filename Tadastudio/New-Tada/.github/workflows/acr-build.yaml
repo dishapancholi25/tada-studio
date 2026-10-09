@@ -1,0 +1,49 @@
+name: ACR Build and Push
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  # Run tests first - deployment is blocked until tests pass
+  test:
+    uses: ./.github/workflows/pytest.yaml
+    with:
+      python_versions: '["3.11"]'  # Match production Docker image version
+    secrets: inherit
+
+  backend:
+    needs: test  # Wait for tests to pass
+    uses: synechron/.github/.github/workflows/acr-build.yaml@main
+    with:
+      docker_context: "backend"
+      dockerfile_path: "backend/Dockerfile"
+      runner: "arc-runner-prod"
+      custom_image_name: "agenticstudio-backend"
+      # Enable BuildKit caching for faster rebuilds
+      build_args: "BUILDKIT_INLINE_CACHE=1"
+    secrets: inherit
+
+  frontend:
+    needs: test  # Wait for tests to pass
+    uses: synechron/.github/.github/workflows/acr-build.yaml@main
+    with:
+      docker_context: "frontend"
+      dockerfile_path: "frontend/Dockerfile"
+      runner: "arc-runner-prod"
+      custom_image_name: "agenticstudio-frontend"
+      # Enable BuildKit caching for faster rebuilds
+      build_args: "BUILDKIT_INLINE_CACHE=1"
+    secrets: inherit

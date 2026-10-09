@@ -1,0 +1,16 @@
+---
+ul-style:
+  style: "dash"
+no-trailing-punctuation:
+  "punctuation": ".,;:"
+line-length:
+  tables: false
+  code_blocks: false
+  line_length: 250
+no-inline-html: false
+fenced-code-language: false
+no-duplicate-heading: false
+no-emphasis-as-heading: false
+ol-prefix: false
+first-line-h1: false
+table-column-style: false

@@ -1,0 +1,261 @@
+Trade Finance Client Database
+Generated: 2026-04-27
+Total Records: 15
+
+---
+Client ID: TFC-001
+Name: John Smith
+Email: john.smith@acmecorp.com
+Phone: +1-555-0101
+Country: United States
+Department: Engineering
+Risk Rating: Low
+Products: Letter of Credit, Bank Guarantee
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-US-78234
+Issuing Authority: New York Commerce Department
+Issue Date: 2024-01-15
+Expiry Date: 2027-01-14
+Extraction Status: Completed
+
+---
+Client ID: TFC-002
+Name: Maria Garcia
+Email: maria.garcia@globaltech.de
+Phone: +49-30-555-0202
+Country: Germany
+Department: Finance
+Risk Rating: High
+Products: Letter of Credit
+KYC Status: Under Review
+Trade License Uploaded: Yes
+License Number: TL-2023-DE-45123
+Issuing Authority: Berlin Trade Authority
+Issue Date: 2023-03-20
+Expiry Date: 2025-03-19
+Extraction Status: Completed
+
+---
+Client ID: TFC-003
+Name: Ahmed Hassan
+Email: ahmed.hassan@mideasttrading.ae
+Phone: +971-4-555-0303
+Country: UAE
+Department: Engineering
+Risk Rating: Medium
+Products: Documentary Collection, Bank Guarantee
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-AE-99001
+Issuing Authority: Dubai Economic Department
+Issue Date: 2024-06-01
+Expiry Date: 2026-05-31
+Extraction Status: Pending
+
+---
+Client ID: TFC-004
+Name: Sophie Mueller
+Email: sophie.mueller@berlinbank.de
+Phone: +49-89-555-0404
+Country: Germany
+Department: Operations
+Risk Rating: Low
+Products: Letter of Credit, Standby LC
+KYC Status: Approved
+Trade License Uploaded: No
+License Number: N/A
+Issuing Authority: N/A
+Issue Date: N/A
+Expiry Date: N/A
+Extraction Status: N/A
+
+---
+Client ID: TFC-005
+Name: Chen Wei
+Email: chen.wei@shanghaiexports.cn
+Phone: +86-21-555-0505
+Country: China
+Department: Engineering
+Risk Rating: High
+Products: Letter of Credit
+KYC Status: Under Review
+Trade License Uploaded: Yes
+License Number: TL-2022-CN-33456
+Issuing Authority: Shanghai Commerce Bureau
+Issue Date: 2022-09-10
+Expiry Date: 2024-09-09
+Extraction Status: Completed
+
+---
+Client ID: TFC-006
+Name: Emily Johnson
+Email: emily.johnson@ukfinance.co.uk
+Phone: +44-20-555-0606
+Country: United Kingdom
+Department: Sales
+Risk Rating: Low
+Products: Bank Guarantee, Documentary Collection
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2025-UK-12890
+Issuing Authority: Companies House UK
+Issue Date: 2025-01-01
+Expiry Date: 2028-01-01
+Extraction Status: Completed
+
+---
+Client ID: TFC-007
+Name: Raj Patel
+Email: raj.patel@mumbaitrade.in
+Phone: +91-22-555-0707
+Country: India
+Department: Engineering
+Risk Rating: Medium
+Products: Letter of Credit, Bank Guarantee
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-IN-77654
+Issuing Authority: Maharashtra Trade Department
+Issue Date: 2024-04-15
+Expiry Date: 2027-04-14
+Extraction Status: Pending
+
+---
+Client ID: TFC-008
+Name: Hans Weber
+Email: hans.weber@frankfurtgroup.de
+Phone: +49-69-555-0808
+Country: Germany
+Department: Legal
+Risk Rating: High
+Products: Standby LC
+KYC Status: Rejected
+Trade License Uploaded: No
+License Number: N/A
+Issuing Authority: N/A
+Issue Date: N/A
+Expiry Date: N/A
+Extraction Status: N/A
+
+---
+Client ID: TFC-009
+Name: Yuki Tanaka
+Email: yuki.tanaka@tokyoexports.jp
+Phone: +81-3-555-0909
+Country: Japan
+Department: Engineering
+Risk Rating: Low
+Products: Letter of Credit, Documentary Collection
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-JP-56789
+Issuing Authority: Tokyo Metropolitan Government
+Issue Date: 2024-02-28
+Expiry Date: 2027-02-27
+Extraction Status: Completed
+
+---
+Client ID: TFC-010
+Name: Carlos Rodriguez
+Email: carlos.rodriguez@braziltrade.br
+Phone: +55-11-555-1010
+Country: Brazil
+Department: Finance
+Risk Rating: Medium
+Products: Bank Guarantee
+KYC Status: Under Review
+Trade License Uploaded: Yes
+License Number: TL-2023-BR-44321
+Issuing Authority: Sao Paulo Trade Registry
+Issue Date: 2023-07-01
+Expiry Date: 2025-06-30
+Extraction Status: Pending
+
+---
+Client ID: TFC-011
+Name: Anna Kowalski
+Email: anna.kowalski@warsawfinance.pl
+Phone: +48-22-555-1111
+Country: Poland
+Department: Operations
+Risk Rating: Low
+Products: Letter of Credit
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-PL-88901
+Issuing Authority: Warsaw Business Registry
+Issue Date: 2024-05-10
+Expiry Date: 2027-05-09
+Extraction Status: Completed
+
+---
+Client ID: TFC-012
+Name: Michael Brown
+Email: michael.brown@sydneybank.au
+Phone: +61-2-555-1212
+Country: Australia
+Department: Engineering
+Risk Rating: Low
+Products: Documentary Collection, Standby LC
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2024-AU-23456
+Issuing Authority: ASIC Australia
+Issue Date: 2024-03-01
+Expiry Date: 2027-02-28
+Extraction Status: Completed
+
+---
+Client ID: TFC-013
+Name: Fatima Al-Salem
+Email: fatima.alsalem@kuwaitcorp.kw
+Phone: +965-2-555-1313
+Country: Kuwait
+Department: Sales
+Risk Rating: High
+Products: Letter of Credit, Bank Guarantee
+KYC Status: Under Review
+Trade License Uploaded: Yes
+License Number: TL-2023-KW-67890
+Issuing Authority: Kuwait Ministry of Commerce
+Issue Date: 2023-11-15
+Expiry Date: 2024-11-14
+Extraction Status: Completed
+
+---
+Client ID: TFC-014
+Name: Pierre Dubois
+Email: pierre.dubois@parisfinance.fr
+Phone: +33-1-555-1414
+Country: France
+Department: Engineering
+Risk Rating: Medium
+Products: Letter of Credit
+KYC Status: Approved
+Trade License Uploaded: No
+License Number: N/A
+Issuing Authority: N/A
+Issue Date: N/A
+Expiry Date: N/A
+Extraction Status: N/A
+
+---
+Client ID: TFC-015
+Name: Lisa Chang
+Email: lisa.chang@singaporetrade.sg
+Phone: +65-6555-1515
+Country: Singapore
+Department: Finance
+Risk Rating: Low
+Products: Letter of Credit, Bank Guarantee, Documentary Collection
+KYC Status: Approved
+Trade License Uploaded: Yes
+License Number: TL-2025-SG-11223
+Issuing Authority: ACRA Singapore
+Issue Date: 2025-02-01
+Expiry Date: 2028-01-31
+Extraction Status: Completed
+
+---
+END OF FILE

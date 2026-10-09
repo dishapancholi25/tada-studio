@@ -1,0 +1,46 @@
+# Node modules
+node_modules
+frontend/node_modules
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+
+# Environment files
+.env.*
+
+# Build artifacts
+# Note: .next is needed for production builds, don't ignore it
+frontend/out
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Virtual environment
+.venv
+
+# IDE files
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Documentation and workspace (not needed in container)
+workspace
+document_cache
+docs
+examples
+
+# CI/CD
+.github

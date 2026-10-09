@@ -1,0 +1,7 @@
+node_modules
+.specflow
+.venv
+**/.venv
+frontend/node_modules
+workspace
+document_cache

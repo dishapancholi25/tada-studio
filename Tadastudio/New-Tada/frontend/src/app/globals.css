@@ -1,0 +1,1422 @@
+@import "tailwindcss";
+
+/* =========================
+   29LT BUKRA FONT
+   Place the font files in /public/fonts/ with the names below.
+   Download from: https://www.29letters.com/fonts/bukra
+   ========================= */
+@font-face {
+	font-family: "29LT Bukra";
+	src: url("/fonts/29LTBukra-Light.woff2") format("woff2"),
+	     url("/fonts/29LTBukra-Light.woff")  format("woff");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "29LT Bukra";
+	src: url("/fonts/29LTBukra-Regular.woff2") format("woff2"),
+	     url("/fonts/29LTBukra-Regular.woff")  format("woff");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "29LT Bukra";
+	src: url("/fonts/29LTBukra-Medium.woff2") format("woff2"),
+	     url("/fonts/29LTBukra-Medium.woff")  format("woff");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "29LT Bukra";
+	src: url("/fonts/29LTBukra-SemiBold.woff2") format("woff2"),
+	     url("/fonts/29LTBukra-SemiBold.woff")  format("woff");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: "29LT Bukra";
+	src: url("/fonts/29LTBukra-Bold.woff2") format("woff2"),
+	     url("/fonts/29LTBukra-Bold.woff")  format("woff");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* =========================
+   GLOBAL BORDER-RADIUS OVERRIDE — 4px for all rectangular elements
+   rounded-full (circles/pills) is intentionally left at 9999px.
+   ========================= */
+@theme {
+	--radius-sm:  4px;
+	--radius:     4px;
+	--radius-md:  4px;
+	--radius-lg:  4px;
+	--radius-xl:  4px;
+	--radius-2xl: 4px;
+	--radius-3xl: 4px;
+}
+
+/* Hide Next.js/npm dev overlay icon */
+nextjs-portal {
+	display: none !important;
+}
+
+/* Alternative selectors for the dev overlay */
+[id^="__next-build-watcher"],
+[id^="__nextjs__container"],
+.nextjs-toast,
+nextjs-build-error-indicator,
+nextjs-dev-overlay {
+	display: none !important;
+}
+
+/* =========================
+   BASE THEME-AGNOSTIC SETUP
+   ========================= */
+
+/* Animation Keyframes */
+@keyframes smoothPulse {
+	0%,
+	100% {
+		opacity: 0.9;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.01);
+	}
+}
+
+@keyframes subtleGlow {
+	0%,
+	100% {
+		box-shadow: 0 0 20px var(--glow-accent);
+	}
+	50% {
+		box-shadow: 0 0 35px var(--glow-accent-strong);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes toastSlideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.toast-animation {
+	animation: toastSlideIn 0.3s ease-out;
+}
+
+/* SSR Overlay Styles */
+#ssr-workflow-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	z-index: 2147483000;
+	background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+	align-items: center;
+	justify-content: center;
+}
+
+html.ssr-overlay-active #ssr-workflow-overlay {
+	display: flex;
+}
+
+#ssr-workflow-overlay .spinner {
+	width: 48px;
+	height: 48px;
+	border-radius: 9999px;
+	border: 3px solid #fdba74;
+	border-top-color: #f97316;
+	animation: ssrSpin 1s linear infinite;
+}
+
+#ssr-workflow-overlay .msg {
+	margin-top: 12px;
+	color: #334155;
+	font-size: 16px;
+	opacity: 0.9;
+}
+
+#ssr-workflow-overlay.fade-out {
+	opacity: 0;
+	transition: opacity 0.2s ease-out;
+	pointer-events: none;
+}
+
+@keyframes ssrSpin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(10px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes hoverLift {
+	0% {
+		transform: translateY(0px);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+	}
+	100% {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+	}
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+@keyframes glowAnimation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+/* Theme-agnostic constants */
+:root {
+	/* Animation Durations */
+	--animation-fast: 150ms;
+	--animation-base: 250ms;
+	--animation-slow: 350ms;
+	--animation-slower: 500ms;
+
+	/* Border Radius — all rectangular elements use 4px */
+	--radius-sm:   4px;
+	--radius-md:   4px;
+	--radius-lg:   4px;
+	--radius-xl:   4px;
+	--radius-2xl:  4px;
+	--radius-3xl:  4px;
+	--radius-full: 9999px; /* circles/pills unchanged */
+
+	/* Alpha values for consistent opacity */
+	--alpha-10: 0.1;
+	--alpha-18: 0.18;
+	--alpha-25: 0.25;
+	--alpha-35: 0.35;
+	--alpha-50: 0.5;
+	--alpha-70: 0.7;
+
+	/* Button fallback text color */
+	--button-primary-text: #0a0a0a;
+
+	/* === Workflow Progress Panel === */
+	/* Step type colours (RGB triplets) */
+	--wp-color-start: 13, 169, 49;
+	--wp-color-agent: 200, 162, 0;
+	--wp-color-tool: 59, 130, 246;
+	--wp-color-condition: 168, 85, 247;
+	--wp-color-end: 156, 163, 175;
+	--wp-color-error: 239, 68, 68;
+
+	/* Panel chrome */
+	--wp-panel-top: rgba(15, 15, 13, 0.95);
+	--wp-panel-bottom: rgba(15, 15, 13, 0.8);
+	--wp-border: rgba(255, 255, 255, 0.06);
+
+	/* Card state backgrounds & borders */
+	--wp-card-completed-bg: rgba(255, 255, 255, 0.02);
+	--wp-card-completed-border: rgba(255, 255, 255, 0.04);
+	--wp-card-running-bg: rgba(200, 162, 0, 0.06);
+	--wp-card-running-border: rgba(200, 162, 0, 0.15);
+	--wp-card-pending-bg: rgba(255, 255, 255, 0.01);
+	--wp-card-pending-border: rgba(255, 255, 255, 0.03);
+	--wp-card-error-bg: rgba(239, 68, 68, 0.05);
+	--wp-card-error-border: rgba(239, 68, 68, 0.12);
+}
+
+/* =========================
+   MASHREQ THEME — DEFAULT (White + Brand Orange)
+   ========================= */
+:root:not([data-color-theme]),
+:root[data-color-theme="mashreq"] {
+	/* ─── Primary / Brand ─── */
+	--color-primary: #FF5E00;
+	--color-primary-rgb: 255, 94, 0;
+	--color-primary-dark: #E05500;
+	--color-primary-light: #FFF1E8;
+	--color-secondary: #EF7413;
+	--color-secondary-dark: #D66611;
+	--color-accent: #FF5E00;
+	--color-accent-light: #FFF1E8;
+
+	/* ─── Status Colors ─── */
+	--color-success: #0DA931;
+	--color-success-light: #F1F8E9;
+	--color-success-text: #1B5E20;
+	--color-error: #B00020;
+	--color-error-dark: #8E001A;
+	--color-error-light: #FFEBEE;
+	--color-warning: #f59e0b;
+	--color-info: #2563eb;
+	--color-notice: #FF5E00;
+
+	/* ─── Background & Surface ─── */
+	--color-bg-primary: #F5F5F9;
+	--color-bg-secondary: #FFFFFF;
+	--color-bg-tertiary: #FBFBFB;
+	--color-surface: #FFFFFF;
+	--color-surface-hover: #FFF1E8;
+	--color-input-bg: #FAFAF9;
+	--color-table-header: #FBFBFB;
+	--color-footer: #252525;
+
+	/* ─── Border Colors ─── */
+	--color-border: #D7D7D7;
+	--color-border-hover: #CCCCCC;
+	--color-border-input: #AAAAB4;
+	--color-border-light: #CCCCCC;
+
+	/* ─── Text Colors ─── */
+	--color-text-primary: #333333;
+	--color-text-dark: #22303E;
+	--color-text-secondary: #4C4C4C;
+	--color-text-muted: #4C4C4C;
+	--color-text-placeholder: #7C7C7C;
+	--color-text-disabled: #9ca3af;
+	--color-text-white: #FFFFFF;
+	--color-text-black: #000000;
+
+	/* ─── Interactive Colors ─── */
+	--color-interactive-active: #FF5E00;
+	--color-interactive-positive: #0DA931;
+	--color-interactive-notification: #FF3E1D;
+	--color-interactive-online: #71DD37;
+
+	/* ─── Node Colors ─── */
+	--color-node-agent: #FF5E00;
+	--color-node-tool: #2563eb;
+	--color-node-condition: #7c3aed;
+	--color-node-orchestrator: #0DA931;
+	--color-node-end: #B00020;
+	--color-node-trigger: #EF7413;
+
+	/* ─── Glass Effects ─── */
+	--glass-background: rgba(255, 255, 255, 0.85);
+	--glass-border: rgba(215, 215, 215, 0.6);
+	--glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+
+	/* ─── Glow Effects ─── */
+	--glow-primary: rgba(255, 94, 0, 0.18);
+	--glow-secondary: rgba(239, 116, 19, 0.18);
+	--glow-success: rgba(13, 169, 49, 0.25);
+	--glow-error: rgba(176, 0, 32, 0.25);
+	--glow-accent: rgba(255, 94, 0, 0.12);
+	--glow-accent-strong: rgba(255, 94, 0, 0.28);
+
+	/* ─── Shadows (Design System) ─── */
+	--shadow-card: 0px 16px 42px rgba(0, 0, 0, 0.06);
+	--shadow-sidebar: 0px 8px 12px rgba(0, 0, 0, 0.1);
+	--shadow-chart: 0px 8px 6px rgba(0, 0, 0, 0.1);
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
+	--shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+
+	/* ─── Navigation ─── */
+	--nav-bg: #FFFFFF;
+	--nav-link: #333333;
+	--nav-link-active: #FF5E00;
+
+	--button-primary-text: #FFFFFF;
+
+	/* ─── Scrollbar ─── */
+	--scrollbar-track: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb: rgba(0, 0, 0, 0.18);
+	--scrollbar-thumb-hover: rgba(255, 94, 0, 0.45);
+
+	/* ─── Alpha Variants ─── */
+	--accent-alpha-05: rgba(255, 94, 0, 0.05);
+	--accent-alpha-10: rgba(255, 94, 0, 0.10);
+	--accent-alpha-12: rgba(255, 94, 0, 0.12);
+	--accent-alpha-18: rgba(255, 94, 0, 0.18);
+	--accent-alpha-25: rgba(255, 94, 0, 0.25);
+	--accent-alpha-35: rgba(255, 94, 0, 0.35);
+
+	/* ─── Workflow Progress Panel ─── */
+	--wp-card-pending-bg: rgba(0, 0, 0, 0.02);
+	--wp-card-pending-border: rgba(0, 0, 0, 0.06);
+	--wp-card-error-bg: rgba(176, 0, 32, 0.06);
+	--wp-card-error-border: rgba(176, 0, 32, 0.2);
+}
+
+/* =========================
+   EXPOSE THEME (Dark + Purple)
+   ========================= */
+:root[data-color-theme="expose"] {
+	--color-primary: #b845ff;
+	--color-primary-rgb: 184, 69, 255;
+	--color-primary-dark: #8624d0;
+	--color-primary-light: #dfacff;
+	--color-secondary: #f3f4f9;
+	--color-secondary-dark: #e6e8f0;
+	--color-accent: #c866ff;
+	--color-accent-light: #e3beff;
+
+	--color-success: #0DA931;
+	--color-success-light: #F1F8E9;
+	--color-error: #d32f2f;
+	--color-error-dark: #b71c1c;
+	--color-warning: var(--color-primary);
+	--color-info: #007bff;
+	--color-notice: #ff6f00;
+
+	--color-bg-primary: #0a0a0a;
+	--color-bg-secondary: #1a1a1a;
+	--color-bg-tertiary: #262626;
+	--color-surface: #1f1f1f;
+	--color-surface-hover: #2a2a2a;
+	--color-border: #404040;
+	--color-border-hover: #737373;
+
+	--color-text-primary: #ffffff;
+	--color-text-dark: #0a0a0a;
+	--color-text-secondary: #d4d4d4;
+	--color-text-muted: #a3a3a3;
+	--color-text-disabled: #737373;
+
+	--color-node-agent: #b845ff;
+	--color-node-tool: #3b82f6;
+	--color-node-condition: #8b5cf6;
+	--color-node-orchestrator: #0DA931;
+	--color-node-end: #d32f2f;
+	--color-node-trigger: #ff6f00;
+
+	--glass-background: rgba(31, 31, 31, 0.85);
+	--glass-border: rgba(64, 64, 64, 0.6);
+	--glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+	--glow-primary: rgba(var(--color-primary-rgb), 0.22);
+	--glow-secondary: rgba(243, 244, 249, 0.6);
+	--glow-success: rgba(13, 169, 49, 0.4);
+	--glow-error: rgba(211, 47, 47, 0.4);
+	--glow-accent: rgba(var(--color-primary-rgb), 0.18);
+	--glow-accent-strong: rgba(var(--color-primary-rgb), 0.32);
+
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.25);
+	--shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.3);
+
+	--nav-bg: #242424;
+	--nav-link: #ffffff;
+	--nav-link-active: #d691ff;
+
+	--button-primary-text: var(--color-text-primary);
+
+	--scrollbar-track: rgba(128, 128, 128, 0.1);
+	--scrollbar-thumb: rgba(128, 128, 128, 0.3);
+	--scrollbar-thumb-hover: rgba(128, 128, 128, 0.5);
+
+	--accent-alpha-10: rgba(var(--color-primary-rgb), 0.12);
+	--accent-alpha-12: rgba(var(--color-primary-rgb), 0.16);
+	--accent-alpha-18: rgba(var(--color-primary-rgb), 0.26);
+	--accent-alpha-25: rgba(var(--color-primary-rgb), 0.35);
+	--accent-alpha-35: rgba(var(--color-primary-rgb), 0.48);
+}
+
+:root {
+	/* Semantic aliases for easy component usage */
+	--background: var(--color-bg-primary);
+	--foreground: var(--color-text-primary);
+
+	/* Tailwind compatibility */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-inter);
+	--font-mono: var(--font-geist-mono);
+}
+
+/* =========================
+   BODY AND BASE STYLES
+   ========================= */
+body {
+	background: var(--color-bg-primary);
+	color: var(--color-text-primary);
+	font-family:
+		"29LT Bukra", var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont,
+		"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-weight: 400;
+	overflow-x: hidden;
+	min-height: 100vh;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+/* =========================
+   SCROLLBAR STYLES
+   ========================= */
+.custom-scrollbar::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: var(--scrollbar-track);
+	border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb);
+	border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--scrollbar-track);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+}
+
+/* Chat-specific scrollbar (neutral — brand accents live in message chrome, not scrollbar tint) */
+.chat-scrollbar::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+	background: rgb(203 213 225 / 0.65);
+	border-radius: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: rgb(148 163 184 / 0.85);
+}
+
+/* =========================
+   ANIMATION CLASSES
+   ========================= */
+.animate-smoothPulse {
+	animation: smoothPulse 2s ease-in-out infinite;
+}
+
+.animate-subtleGlow {
+	animation: subtleGlow 2s ease-in-out infinite;
+}
+
+.animate-fadeIn {
+	animation: fadeIn 0.15s ease-out;
+}
+
+.animate-slideUp {
+	animation: slideUp 0.2s ease-out;
+}
+
+.animate-slideIn {
+	animation: slideIn 0.3s ease-out;
+}
+
+.animate-scaleIn {
+	animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-slideDown {
+	animation: slideDown 200ms ease-out;
+}
+
+/* Plus button pulse for empty canvas */
+@keyframes plusPulse {
+	0%,
+	100% {
+		box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.4);
+	}
+	50% {
+		box-shadow: 0 0 0 10px rgba(var(--color-primary-rgb), 0);
+	}
+}
+
+.animate-plusPulse {
+	animation: plusPulse 2s ease-in-out infinite;
+}
+
+/* Ghost workflow fade-in-up */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fadeInUp {
+	animation: fadeInUp 0.5s ease-out;
+}
+
+/* Chat streaming animations */
+@keyframes typingCursor {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
+.animate-typingCursor {
+	animation: typingCursor 1s ease-in-out infinite;
+}
+
+@keyframes toolCardIn {
+	from {
+		opacity: 0;
+		transform: translateY(4px) scale(0.98);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.animate-toolCardIn {
+	animation: toolCardIn 0.25s ease-out;
+}
+
+@keyframes agentSectionIn {
+	from {
+		opacity: 0;
+		transform: translateX(-6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.animate-agentSectionIn {
+	animation: agentSectionIn 0.3s ease-out;
+}
+
+@keyframes thinkingPulse {
+	0%,
+	100% {
+		opacity: 0.4;
+	}
+	50% {
+		opacity: 0.8;
+	}
+}
+
+.animate-thinkingPulse {
+	animation: thinkingPulse 2s ease-in-out infinite;
+}
+
+/* Connector pulse for in-progress workflow connectors */
+@keyframes connectorPulse {
+	0% { background-position: 0% 0%; }
+	100% { background-position: 0% 200%; }
+}
+
+.animate-connectorPulse {
+	background: linear-gradient(180deg, rgba(var(--color-primary-rgb), 0.5), rgba(var(--color-primary-rgb), 0.12), rgba(var(--color-primary-rgb), 0.5));
+	background-size: 100% 200%;
+	animation: connectorPulse 1.5s ease-in-out infinite;
+}
+
+/* Chat area spotlight background */
+.chat-area-bg {
+	background:
+		radial-gradient(ellipse 60% 50% at 50% 40%, rgba(var(--color-primary-rgb), 0.035) 0%, transparent 70%),
+		var(--color-bg-primary);
+}
+
+/* Message bubble tail shapes */
+.chat-bubble-user {
+	border-radius: 16px 16px 4px 16px;
+}
+
+.chat-bubble-assistant {
+	border-radius: 16px;
+}
+
+/* Glass input container */
+.chat-input-glass {
+	background: var(--glass-background);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid var(--glass-border);
+	border-radius: 24px;
+	transition: all 0.3s ease;
+}
+
+.chat-input-glass:focus-within {
+	border-color: rgba(var(--color-primary-rgb), 0.4);
+	box-shadow:
+		0 0 20px rgba(var(--color-primary-rgb), 0.12),
+		0 0 40px rgba(var(--color-primary-rgb), 0.06),
+		inset 0 0 12px rgba(var(--color-primary-rgb), 0.04);
+}
+
+/* Chat system/date divider */
+.chat-system-divider {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 0;
+}
+
+.chat-system-divider::before,
+.chat-system-divider::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	background: linear-gradient(to right, transparent, var(--color-border), transparent);
+}
+
+.chat-system-divider span {
+	font-size: 0.65rem;
+	text-transform: uppercase;
+	letter-spacing: 0.25em;
+	color: var(--color-text-muted);
+	white-space: nowrap;
+}
+
+/* Status indicator dots */
+.status-dot-ready {
+	background-color: #0DA931;
+	box-shadow: 0 0 8px rgba(13, 169, 49, 0.5);
+}
+
+.status-dot-executing {
+	background-color: #f59e0b;
+	box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+	animation: smoothPulse 2s ease-in-out infinite;
+}
+
+/* Ghost button */
+.btn-ghost {
+	background: transparent;
+	border: 1px solid transparent;
+	color: var(--color-text-muted);
+	transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+	background: rgba(255, 255, 255, 0.04);
+	border-color: rgba(255, 255, 255, 0.08);
+	color: var(--color-text-secondary);
+}
+
+/* === WORKFLOW PROGRESS PANEL ANIMATIONS === */
+
+/* Breathing glow on the running step card */
+@keyframes wpBreathe {
+	0%, 100% { box-shadow: 0 0 20px -4px rgba(var(--wp-color-agent), 0.08); }
+	50% { box-shadow: 0 0 28px -4px rgba(var(--wp-color-agent), 0.16); }
+}
+
+.animate-wpBreathe {
+	animation: wpBreathe 3s ease-in-out infinite;
+}
+
+/* Energy dot travelling down the active connector */
+@keyframes wpPulseDown {
+	0% { top: -8px; opacity: 0; }
+	20% { opacity: 1; }
+	80% { opacity: 1; }
+	100% { top: calc(100% + 8px); opacity: 0; }
+}
+
+/* Step card entrance */
+@keyframes wpStepEntrance {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(0.97);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+.animate-wpStepEntrance {
+	animation: wpStepEntrance 300ms ease-out backwards;
+	animation-delay: calc(var(--step-index, 0) * 80ms);
+}
+
+/* Pulsing status dot for running nodes */
+@keyframes wpPulseDot {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.4); }
+}
+
+.animate-wpPulseDot {
+	animation: wpPulseDot 1.5s ease-in-out infinite;
+}
+
+/* One-time completion sweep glow */
+@keyframes wpCompletionSweep {
+	0% { background-color: rgba(var(--wp-color-start), 0.1); }
+	50% { background-color: rgba(var(--wp-color-start), 0.6); }
+	100% { background-color: rgba(var(--wp-color-start), 0.4); }
+}
+
+.animate-wpCompletionSweep {
+	animation: wpCompletionSweep 400ms ease-out forwards;
+	animation-delay: calc(var(--connector-index, 0) * 200ms);
+}
+
+/* Connector base styles */
+.wp-connector-completed {
+	background-color: rgba(var(--wp-color-start), 0.4);
+}
+
+.wp-connector-pending {
+	background: repeating-linear-gradient(
+		to bottom,
+		rgba(255, 255, 255, 0.08) 0px,
+		rgba(255, 255, 255, 0.08) 4px,
+		transparent 4px,
+		transparent 8px
+	);
+}
+
+.wp-connector-active {
+	background-color: rgba(var(--wp-color-agent), 0.15);
+	position: relative;
+	overflow: hidden;
+}
+
+.wp-connector-active .wp-pulse-dot {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 8px;
+	border-radius: 4px;
+	background-color: rgba(var(--wp-color-agent), 0.8);
+	box-shadow: 0 0 8px rgba(var(--wp-color-agent), 0.4);
+	animation: wpPulseDown 1.5s ease-in-out infinite;
+}
+
+/* Header sparkle pulse */
+@keyframes wpSparklePulse {
+	0%, 100% { opacity: 0.5; }
+	50% { opacity: 1; }
+}
+
+.animate-wpSparklePulse {
+	animation: wpSparklePulse 2s ease-in-out infinite;
+}
+
+/* Tool call progress bar (indeterminate shimmer) */
+@keyframes toolProgressBar {
+	0% { transform: translateX(-100%); }
+	100% { transform: translateX(200%); }
+}
+
+.tool-progress-bar {
+	position: relative;
+	height: 2px;
+	overflow: hidden;
+	border-radius: 1px;
+	background: rgb(226 232 240);
+}
+
+.tool-progress-bar::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	width: 50%;
+	border-radius: 1px;
+	background: linear-gradient(90deg, transparent, rgb(234 88 12 / 0.75), transparent);
+	animation: toolProgressBar 1.5s ease-in-out infinite;
+}
+
+/* Border pulse for running tool cards */
+@keyframes borderPulse {
+	0%, 100% { border-color: rgba(var(--color-primary-rgb), 0.15); }
+	50% { border-color: rgba(var(--color-primary-rgb), 0.35); }
+}
+
+.animate-borderPulse {
+	animation: borderPulse 2s ease-in-out infinite;
+}
+
+/* Typing dots for thinking indicator */
+@keyframes typingDot {
+	0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+	30% { opacity: 1; transform: translateY(-3px); }
+}
+
+.typing-dots span {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: rgb(100 116 139 / 0.55);
+	margin: 0 2px;
+}
+
+.typing-dots span:nth-child(1) { animation: typingDot 1.4s ease-in-out infinite; }
+.typing-dots span:nth-child(2) { animation: typingDot 1.4s ease-in-out 0.2s infinite; }
+.typing-dots span:nth-child(3) { animation: typingDot 1.4s ease-in-out 0.4s infinite; }
+
+/* Chat agent divider (between multi-agent sections) */
+.chat-agent-divider {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 4px 0;
+}
+
+.chat-agent-divider::before,
+.chat-agent-divider::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+}
+
+/* Smooth expand/collapse for tool card details */
+@keyframes expandContent {
+	from { opacity: 0; max-height: 0; }
+	to { opacity: 1; max-height: 500px; }
+}
+
+.animate-expandContent {
+	animation: expandContent 0.2s ease-out forwards;
+	overflow: hidden;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.animate-plusPulse,
+	.animate-fadeInUp,
+	.animate-smoothPulse,
+	.animate-subtleGlow,
+	.animate-typingCursor,
+	.animate-toolCardIn,
+	.animate-agentSectionIn,
+	.animate-thinkingPulse,
+	.animate-connectorPulse,
+	.animate-wpBreathe,
+	.animate-wpStepEntrance,
+	.animate-wpPulseDot,
+	.animate-wpCompletionSweep,
+	.animate-wpSparklePulse,
+	.animate-borderPulse,
+	.animate-expandContent,
+	.typing-dots span,
+	.tool-progress-bar::after,
+	.status-dot-executing {
+		animation: none;
+	}
+}
+
+.hover-lift {
+	transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+	animation: hoverLift 0.3s ease forwards;
+}
+
+/* =========================
+   UTILITY CLASSES
+   ========================= */
+.bg-surface {
+	background-color: var(--color-surface);
+}
+
+.bg-surface-hover:hover {
+	background-color: var(--color-surface-hover);
+}
+
+.bg-primary {
+	background-color: var(--color-bg-primary);
+}
+
+.bg-secondary {
+	background-color: var(--color-bg-secondary);
+}
+
+.border-default {
+	border-color: var(--color-border);
+}
+
+.border-hover:hover {
+	border-color: var(--color-border-hover);
+}
+
+.text-primary {
+	color: var(--color-text-primary);
+}
+
+.text-secondary {
+	color: var(--color-text-secondary);
+}
+
+.text-muted {
+	color: var(--color-text-muted);
+}
+
+.text-disabled {
+	color: var(--color-text-disabled);
+}
+
+/* =========================
+   GLASS MORPHISM STYLES
+   ========================= */
+.glass-morphism {
+	background: var(--glass-background);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid var(--glass-border);
+	box-shadow: var(--glass-shadow);
+}
+
+.glass-morphism-subtle {
+	background: rgba(255, 255, 255, 0.02);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+.btn-gradient {
+	background: linear-gradient(
+		135deg,
+		var(--color-primary),
+		var(--color-accent)
+	);
+	color: var(--button-primary-text);
+	transition: all 0.2s ease;
+}
+
+.btn-gradient:hover {
+	filter: brightness(1.1);
+	transform: translateY(-1px);
+}
+
+.btn-primary {
+	background: var(--color-primary);
+	color: var(--button-primary-text);
+}
+
+.btn-primary-text {
+	color: var(--button-primary-text);
+}
+
+.btn-secondary {
+	background: var(--color-surface);
+	color: var(--color-text-primary);
+	border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+	background: var(--color-surface-hover);
+	border-color: var(--color-border-hover);
+}
+
+/* =========================
+   COMPONENT STYLES
+   ========================= */
+
+/* ReactFlow Overrides */
+.react-flow__minimap {
+	background-color: var(--color-surface) !important;
+	border: 1px solid var(--color-border) !important;
+}
+
+.react-flow__minimap-mask {
+	fill: var(--color-bg-primary) !important;
+	opacity: 0.7 !important;
+}
+
+.react-flow__minimap-node {
+	fill: var(--color-accent) !important;
+	stroke: var(--color-border) !important;
+}
+
+.react-flow__controls {
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 0 !important;
+	background: linear-gradient(
+		150deg,
+		rgba(var(--color-primary-rgb), 0.26),
+		rgba(0, 0, 0, 0.78)
+	) !important;
+	border: 1px solid rgba(var(--color-primary-rgb), 0.32) !important;
+	border-radius: 18px !important;
+	box-shadow:
+		0 24px 40px rgba(0, 0, 0, 0.45),
+		0 0 24px rgba(var(--color-primary-rgb), 0.25) !important;
+	overflow: hidden !important;
+	backdrop-filter: blur(14px);
+}
+
+.react-flow__controls-button {
+	background: transparent !important;
+	border: none !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+	color: var(--color-text-primary) !important;
+	padding: 0.65rem !important;
+	transition:
+		background-color 0.2s ease,
+		transform 0.2s ease,
+		color 0.2s ease,
+		box-shadow 0.2s ease !important;
+}
+
+.react-flow__controls-button:last-child {
+	border-bottom: none !important;
+}
+
+.react-flow__controls-button:hover {
+	background: rgba(var(--color-primary-rgb), 0.22) !important;
+	color: var(--color-text-primary) !important;
+	transform: translateY(-1px);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.react-flow__controls-button:active {
+	transform: scale(0.95);
+	background: rgba(var(--color-primary-rgb), 0.32) !important;
+}
+
+.react-flow__controls-button svg {
+	stroke: currentColor !important;
+	fill: none !important;
+	width: 16px;
+	height: 16px;
+}
+
+/* Node Selection */
+.selected-node {
+	box-shadow: 0 0 0 2px var(--color-accent) !important;
+}
+
+/* Dialog Backdrop */
+.dialog-backdrop {
+	background-color: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(4px);
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border);
+	color: var(--color-text-primary);
+	transition: all 0.15s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+	border-color: var(--color-accent);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="number"]:disabled,
+textarea:disabled,
+select:disabled {
+	background-color: var(--color-bg-secondary);
+	color: var(--color-text-disabled);
+	cursor: not-allowed;
+}
+
+/* Inline search input - no border or focus ring */
+.input-inline {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.input-inline:focus {
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+/* Placeholder Text */
+::placeholder {
+	color: var(--color-text-muted);
+	opacity: 0.7;
+}
+
+/* =========================
+   CURSOR POINTER FOR INTERACTIVE ELEMENTS
+   ========================= */
+button:not(:disabled):not([aria-disabled="true"]),
+[role="button"]:not([aria-disabled="true"]),
+[type="button"]:not(:disabled),
+[type="submit"]:not(:disabled),
+[type="reset"]:not(:disabled),
+a[href],
+label[for],
+select:not(:disabled),
+summary,
+[tabindex]:not([tabindex="-1"]) {
+	cursor: pointer;
+}
+
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="file"]:not(:disabled) {
+	cursor: pointer;
+}
+
+/* Disabled elements should show not-allowed cursor */
+button:disabled,
+button[aria-disabled="true"],
+[role="button"][aria-disabled="true"],
+input:disabled,
+select:disabled,
+textarea:disabled {
+	cursor: not-allowed;
+}
+
+/* =========================
+   MONACO EDITOR OVERRIDES
+   ========================= */
+.monaco-editor,
+.monaco-editor-background,
+.monaco-editor .margin {
+	background-color: var(--color-bg-secondary) !important;
+}
+
+.monaco-editor .line-numbers {
+	color: var(--color-text-muted) !important;
+}
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+.shimmer {
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.1),
+		transparent
+	);
+	background-size: 200% 100%;
+	animation: shimmer 2s infinite;
+}
+
+.glow-animation {
+	background: linear-gradient(
+		45deg,
+		var(--color-primary),
+		var(--color-accent),
+		var(--color-primary)
+	);
+	background-size: 200% 200%;
+	animation: glowAnimation 3s ease infinite;
+}
+
+/* =========================
+   CUSTOM PATTERNS
+   ========================= */
+.dotted-pattern {
+	background-image: radial-gradient(
+		circle,
+		var(--color-border) 1px,
+		transparent 1px
+	);
+	background-size: 20px 20px;
+}
+
+.grid-pattern {
+	background-image:
+		linear-gradient(var(--color-border) 1px, transparent 1px),
+		linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+	background-size: 20px 20px;
+}
+
+/* Agent -> Tool Connection Line Animation */
+@keyframes dash {
+	to {
+		stroke-dashoffset: -10;
+	}
+}
+
+.agent-tool-connection {
+	stroke: var(--color-primary);
+	stroke-width: 2.5;
+	stroke-dasharray: 5 5;
+	animation: dash 1s linear infinite;
+}
+
+@keyframes library-flow-bar {
+	from {
+		background-position: 220% 0;
+	}
+	to {
+		background-position: -220% 0;
+	}
+}
+
+/* Glow Effects */
+.glow-primary {
+	box-shadow: 0 0 20px var(--glow-primary);
+}
+
+.glow-accent {
+	box-shadow: 0 0 20px var(--glow-accent);
+}
+
+.glow-success {
+	box-shadow: 0 0 20px var(--glow-success);
+}
+
+.glow-error {
+	box-shadow: 0 0 20px var(--glow-error);
+}
+
+/* =========================
+   TOOLTIPS
+   ========================= */
+.tooltip {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	color: var(--color-text-primary);
+	box-shadow: var(--shadow-lg);
+}
+
+.tooltip-arrow {
+	border-color: var(--color-surface) transparent transparent transparent;
+}
+
+/* =========================
+   RESPONSIVE UTILITIES
+   ========================= */
+@media (max-width: 640px) {
+	.hide-mobile {
+		display: none !important;
+	}
+}
+
+@media (min-width: 641px) {
+	.hide-desktop {
+		display: none !important;
+	}
+}
+
+/* =========================
+   PRINT STYLES
+   ========================= */
+@media print {
+	body {
+		background: white;
+		color: black;
+	}
+
+	.no-print {
+		display: none !important;
+	}
+}

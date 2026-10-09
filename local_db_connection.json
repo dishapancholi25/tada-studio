@@ -1,0 +1,11 @@
+{
+  "name": "local-langgraph-db",
+  "description": "Local Postgres for Bug 7705 reproduction testing",
+  "database_type": "postgres",
+  "host": "postgres",
+  "port": 5432,
+  "database_name": "langgraph",
+  "username": "postgres",
+  "password": "postgres",
+  "use_ssl": false
+}

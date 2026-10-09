@@ -1,0 +1,26 @@
+site_name: Agentic Studio
+docs_dir: docs
+nav:
+  - Home: index.md
+  - Architecture:
+      - Overview: 'architecture/00-overview.md'
+      - Diagrams: 'architecture/01-architecture-diagrams.md'
+      - Data Flows: 'architecture/02-data-flows.md'
+      - Design Principles: 'architecture/03-design-principles.md'
+      - Reference: 'architecture/04-architecture-reference.md'
+      - Configuration: 'architecture/05-configuration.md'
+      - Phoenix Integration: 'architecture/06-phoenix-integration.md'
+  - User Guide:
+      - Importing Agents: 'for-users/01-importing-agents.md'
+      - User API Tokens: 'for-users/02-user-api-tokens.md'
+      - Evaluations: 'for-users/05-evaluations.md'
+      - Phoenix Trace Analysis: 'for-users/10-phoenix-trace-analysis.md'
+  - Developer Guide:
+      - Local Dev: 'for-developers/00-running-the-app.md'
+      - Nginx Setup: 'for-developers/01-nginx-setup.md'
+      - OAuth2 Proxy Setup: 'for-developers/02-oauth2-proxy-azure-setup.md'
+      - Database Cleanup: 'for-developers/03-database-orphaned-workflows-cleanup.md'
+  - Operations:
+      - Phoenix Runbook: 'operations/phoenix-runbook.md'
+plugins:
+  - techdocs-core

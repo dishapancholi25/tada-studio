@@ -1,0 +1,130 @@
+trigger:
+  branches:
+    include:
+      - dev
+pool:
+  name: dev-linux-agent
+  demands:
+    - Agent.OS -equals Linux
+
+variables:
+- name: dockerfilePath
+  value: '$(Build.SourcesDirectory)/frontend/Dockerfile'
+- name: imageTag
+  value: '$(Build.BuildId)'
+- name: latestTag   
+  value: 'latest'
+
+stages:
+- stage: Build_Dev
+  displayName: 'Build Docker Image - Dev'
+  variables:
+  - group: dev-aicoe-tada-builder-frontend-vg
+
+  jobs:
+  - job: BuildDev
+    displayName: 'Build dev image'
+    steps:
+    - checkout: self
+      clean: true
+
+    - task: DownloadSecureFile@1
+      name: envFileDev
+      displayName: 'Download dev .env secure file'
+      inputs:
+        secureFile: 'dev-aicoe-tada-builder-app.env'
+
+    - task: Bash@3
+      displayName: 'Copy secure .env'
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          cp $(envFileDev.secureFilePath) $(Build.SourcesDirectory)/frontend/.env
+          ls -la $(Build.SourcesDirectory)/frontend/
+
+    - task: Bash@3
+      displayName: 'Build Docker image'
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          cd $(Build.SourcesDirectory)/frontend/
+          docker build \
+            -t $(IMAGE_REPO):$(imageTag) \
+            -t $(IMAGE_REPO):$(latestTag) \
+            -f $(dockerfilePath) \
+            .
+          docker images | grep $(IMAGE_REPO)
+
+- stage: Deploy_Dev
+  displayName: 'Deploy to Dev'
+  dependsOn: Build_Dev
+  variables:
+  - group: dev-aicoe-tada-builder-frontend-vg
+
+  jobs:
+  - deployment: DeployDev
+    displayName: 'Deploy app to dev'
+    environment: 'aicoe-tada-builder-app-dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            clean: true
+
+          - task: DownloadSecureFile@1
+            name: envFileDevDeploy
+            displayName: 'Download dev .env secure file'
+            inputs:
+              secureFile: 'dev-aicoe-tada-builder-app.env'
+
+          - task: Bash@3
+            displayName: 'Prepare .env'
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e
+                cp $(envFileDevDeploy.secureFilePath) $(Build.SourcesDirectory)/frontend/.env
+
+          - task: Bash@3
+            displayName: 'Build image again for deploy'
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e
+                cd $(Build.SourcesDirectory)/frontend/
+                docker build \
+                  -t $(IMAGE_REPO):$(imageTag) \
+                  -t $(IMAGE_REPO):$(latestTag) \
+                  -f $(dockerfilePath) \
+                  .
+          - task: Bash@3
+            displayName: 'Remove old container'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker rm -f $(CONTAINER_NAME) || true
+
+          - task: Bash@3
+            displayName: 'Run new container'
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e
+                docker run -d \
+                  --name $(CONTAINER_NAME) \
+                  --restart unless-stopped \
+                  --env-file $(Build.SourcesDirectory)/frontend/.env \
+                  --add-host cclmai.dev.neoventures.vc:10.226.69.20 \
+                  -p $(HOST_PORT):$(CONTAINER_PORT) \
+                  $(IMAGE_REPO):$(imageTag)
+
+          - task: Bash@3
+            displayName: 'Verify container'
+            inputs:
+              targetType: 'inline'
+              script: |
+                docker ps
+                docker logs --tail 100 $(CONTAINER_NAME) || true

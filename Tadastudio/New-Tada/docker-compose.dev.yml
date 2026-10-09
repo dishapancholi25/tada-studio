@@ -1,0 +1,110 @@
+services:
+  # DES - added postgres with pgvector extension for local testing
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "6666:5432"
+    environment:
+      - POSTGRES_DB=langgraph
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data_tada_builder:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-init:
+    image: pgvector/pgvector:pg16
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - PGHOST=postgres
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+    command: >
+      bash -c "
+        psql -tc \"SELECT 1 FROM pg_database WHERE datname = 'phoenix'\" | grep -q 1 || psql -c 'CREATE DATABASE phoenix;';
+        echo 'Database init complete.'
+      "
+    restart: "no"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # Remove port exposure - nginx will be the entry point
+
+    extra_hosts:
+      - "cclmai.dev.neoventures.vc:10.226.69.200"
+
+    ports:
+      - "8880:8000"
+    env_file:
+      - .env
+    environment:
+      - PORT=8000
+      - DEVELOPMENT_MODE=true
+      - ROOT_PATH=/api
+      - LOG_LEVEL=DEBUG
+      - LLM_GUARD_MODE=api
+      - LLM_GUARD_API_URL=http://10.226.36.5:8802
+      - LLM_GUARD_API_TIMEOUT=30
+      - LLM_GUARD_API_KEY=local-dev-key
+    volumes:
+      - ./backend:/app/backend
+      - ./workspace:/app/workspace
+      - ./logs:/app/logs
+    command: ["python", "-m", "backend.app"]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+      args:
+        - NEXT_PUBLIC_SKIP_AUTH=true
+        - NEXT_PUBLIC_ADMIN_CREDENTIALS=admin@mashreq.com:admin123,ritikabh@mashreq.com:admin123,sachinkar@mashreq.com:admin123,rahulbis@mashreq.com:admin123
+        - NEXT_PUBLIC_USER_CREDENTIALS=user@mashreq.com:user123,user2@mashreq.com:user123
+
+    extra_hosts:
+      - "cclmai.dev.neoventures.vc:10.226.69.200"
+
+
+    # Remove port exposure - nginx will be the entry point
+    ports:
+      - "3330:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://10.226.36.5:8880
+      - BACKEND_URL=http://10.226.36.5:8880
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: ["npm", "run", "dev"]
+
+  llm-guard:
+    build:
+      context: ./llm-guard
+      dockerfile: Dockerfile
+      args:
+        - HF_TOKEN=${HF_TOKEN}
+    ports:
+      - "8802:8002"
+    environment:
+      - PORT=8002
+      - VAULT_TTL_SECONDS=3600
+      - LLM_GUARD_API_KEY=local-dev-key
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://10.226.36.5:8802/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    restart: unless-stopped
+
+volumes:
+  postgres_data_tada_builder:

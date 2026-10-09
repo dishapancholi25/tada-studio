@@ -1,0 +1,75 @@
+{
+    "_comment": "Model parameter transformation rules. Transformations are applied in order: api_version_rules -> rename -> drop -> force -> defaults. Model patterns use glob-style matching (e.g. 'o1*' matches 'o1', 'o1-mini', 'o1-preview'). Model-level rules override provider-level defaults.",
+    "version": "1.1",
+    "providers": {
+        "openai": {
+            "param_transforms": {},
+            "drop_params": ["reasoning_effort"],
+            "defaults": {},
+            "models": {
+                "o1*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["temperature", "top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "o3*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "o4*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "gpt-5*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["temperature", "top_p", "presence_penalty", "frequency_penalty", "logprobs", "top_logprobs", "logit_bias", "max_tokens"]
+                }
+            }
+        },
+        "azure_openai": {
+            "param_transforms": {},
+            "drop_params": ["reasoning_effort"],
+            "defaults": {},
+            "api_version_rules": [],
+            "models": {
+                "o1*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["temperature", "top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "o3*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "o4*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["top_p", "presence_penalty", "frequency_penalty"]
+                },
+                "gpt-5*": {
+                    "param_transforms": {
+                        "max_tokens": { "rename_to": "max_completion_tokens", "via": "model_kwargs" }
+                    },
+                    "drop_params": ["temperature", "top_p", "presence_penalty", "frequency_penalty", "logprobs", "top_logprobs", "logit_bias", "max_tokens"]
+                }
+            }
+        },
+        "anthropic": {
+            "param_transforms": {},
+            "drop_params": [],
+            "defaults": {},
+            "models": {}
+        }
+    }
+}

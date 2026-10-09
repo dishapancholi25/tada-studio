@@ -1,0 +1,1366 @@
+{
+  "name": "Account Unlock Investigation Orchestration",
+  "description": "Accepts IT service tickets for locked accounts for a specific user and investigates the reason to determine the coarse of action.",
+  "nodes": [
+    {
+      "uniq_id": "b8d2e7d4-c14a-4dcf-baf5-eb5ad54bcd28",
+      "name": "Start",
+      "type": "START",
+      "position": {
+        "x": 50,
+        "y": 100
+      },
+      "nexts": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "created_at": "2025-12-14T11:23:11.652329",
+      "updated_at": "2026-04-02T14:08:37.296481"
+    },
+    {
+      "uniq_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "name": "Instake and Traige Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 367.7912000000001,
+        "y": 446.7392
+      },
+      "nexts": [
+        "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+        "fb15b982-e73f-4011-91e3-2326e540271c"
+      ],
+      "inputs": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "prompt_template": "You are a triage and response agent. You must talk to your user profile agent, and triage agent to generate a final report in this format. \n\nONLY INVOKE THE PLAYBOOK AGENT AFTER THE USER PROFILE AGENT IS FINISHED\n\n\nONLY RETURN THE FOLLOWING , NOTHING ELSE \n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status: [Current Account Status]\n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]\n",
+      "agent_config": {
+        "system_prompt": "You are a triage and response agent. You must talk to your user profile agent, and triage agent to generate a final report in this format. \n\nONLY INVOKE THE PLAYBOOK AGENT AFTER THE USER PROFILE AGENT IS FINISHED\n\nONLY RETURN THE FOLLOWING , NOTHING ELSE \n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status: [Current Account Status]\n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]\n\nIf any user profile field is missing, use '[MISSING]' (not '[Not Found]') as the value.\nAlways use the specific playbook name (e.g., 'Incomplete Ticket Handling') for 'Selected Investigation Playbook' instead of generic identifiers like 'PB-UNKNOWN'.\nALWAYS explicitly state the full playbook name and lockout reason as provided by the upstream agents or data sources, matching the expected output format exactly. Do not omit or generalize these fields.",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": true,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [
+          "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+          "fb15b982-e73f-4011-91e3-2326e540271c"
+        ],
+        "delegation_strategy": "dynamic",
+        "include_delegation_tools": true,
+        "handoff_pattern": "tool_based",
+        "share_context": true,
+        "max_delegation_depth": 3,
+        "delegation_timeout": 300,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-14T21:55:50.079454",
+      "updated_at": "2026-04-02T14:08:50.948815",
+      "is_sub_agent": true,
+      "parent_agent_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "delegation_description": "The triage and response agent that will communicate to the user profile agent, and triage agent to generate a final report in the standard format."
+    },
+    {
+      "uniq_id": "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+      "name": "User Profile Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 16.791200000000117,
+        "y": 846.7392
+      },
+      "nexts": [
+        "60d5a184-d6fe-4998-8689-dd8c2bcc1a39",
+        "65c07698-405b-4ccb-88d4-56a1289a1ca1"
+      ],
+      "inputs": [
+        "fa88a049-a81e-4afc-9ced-47fbe36a702d"
+      ],
+      "description": "Call this agent when you need to build a user profile. \n\nThis agent has access to two HTTP Calls. The agent will execute both of them and search for the user to build a profile. Return the report in this format: \n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status: [Current Account Status]",
+      "agent_config": {
+        "system_prompt": "You have access to two HTTP Calls to retrieve user profile data from the IAM and HRM systems. You must execute both of them and search for the user to build a profile. You must choose the order to call the systems based on the employee information available in the request. If you call the tool without any query parameter the system will return user profile data for all users.\n\nThe IAM system query parameter can contain one of userId (login username), userPrincipleName (email address), or the commonName (firstName lastName) and returns:\n    {\n      \"userId\": ,\n      \"userPrincipalName\":,\n      \"commonName\":,\n      \"firstName\":,\n      \"lastName\":,\n      \"accountStatus\":,\n      \"lockoutReasonCode\":,\n      \"isPrivileged\":,\n      \"lastPasswordChange\":,\n      \"managerId\":,\n      \"department\":,\n      \"groupMemberships\": [ ]\n    }\n\nThe HRM systems query parameter can container one of employeeId (integer) or the commonName (firstName lastName) and returns:\n    {\n      \"employeeId\":,\n      \"legalFirstName\":,\n      \"legalLastName\":,\n      \"businessTitle\":,\n      \"costCenter\":,\n      \"departmentName\":,\n      \"managerId\":,\n      \"managerFullName\":,\n      \"officeLocation\":,\n      \"registeredMobile\":,\n      \"activeTravelItineraries\": [ ]\n    }\n\nReturns the report in this format: \n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status:  [lockoutReasonCode]",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": false,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-14T21:57:08.214376",
+      "updated_at": "2026-04-02T14:08:50.949296",
+      "is_sub_agent": true,
+      "parent_agent_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "delegation_description": "Call this agent when you need to build a user profile.\n\nReturns the user profile in this format: \n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status: [Current Account Status]"
+    },
+    {
+      "uniq_id": "fb15b982-e73f-4011-91e3-2326e540271c",
+      "name": "Playbook Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 518.7912000000001,
+        "y": 846.7392
+      },
+      "nexts": [
+        "13600491-ed0f-4d09-adb7-2a46b9d024c0"
+      ],
+      "inputs": [
+        "fa88a049-a81e-4afc-9ced-47fbe36a702d"
+      ],
+      "description": "This is the investigation playbook agent. Below is the investigation playbook \n\n___\n\nCONFIDENTIALITY: INTERNAL USE ONLY\nDocument ID: SOP-INV-001\nTitle: Investigation Playbooks for Account Unlock\nOwner: Head of IT Service Operations\nReviewing Body: IT Risk & Compliance Committee\nEffective Date: 01-NOVEMBER-2025\nVersion: 1.0\n1. Purpose and Scope\n1.1. Purpose\nThis document provides a set of standardized \"Investigation Playbooks.\" It is a primary knowledge set for IT Operations staff performing an account unlock investigation. Its purpose is to ensure that the data collection for an \"Account Unlock\" investigation is targeted, efficient, and proportionate to the initial evidence.\n1.2. Scope\nThis SOP governs the evidence-gathering phase of all \"Account Unlock\" investigations. It dictates which data sources are to be queried for which type of initial event.\n2. Audience\n●\tService Desk Level 1 / Triage Staff: Staff MUST consult this document in the initial triage phase to select the appropriate Playbook_ID based on initial findings from the IAM system.\n●\tIT Operations Level 2 / Investigation Staff: Staff MUST execute the data collection steps defined in the specific Playbook_ID assigned to the case. Staff are explicitly prohibited from querying sources not listed in the assigned playbook without documented justification and approval.\n●\tHuman Oversight Teams (IT Operations, IT Risk): This document serves as the auditable record of the standard investigation logic.\n3. Governance and Maintenance\nThis document must be reviewed quarterly by the Head of IT Service Operations in consultation with the Security Operations Center (SOC) and IT Compliance. Any new data sources (e.g., new security tools) or new IAM reason codes must be formally added to these playbooks via a change request.\n4. Investigation Playbook Matrix\nThe Service Desk Analyst will first query the Identity & Access Management (IAM) System for the Account_Status and Lockout_Reason_Code. It will then use this matrix to select the correct Playbook_ID and assign it to the case.\nPlaybook: PB-BENIGN (Benign User Error)\n●\tTrigger: Lockout_Reason_Code is BadPasswordCount OR ExpiredPassword.\n●\tObjective: Confirm the lockout is a simple user error with no other suspicious indicators.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve all authentication attempts for the user in the last 1 hour.\n2.\tQuery Azure AD Sign-in Logs: Retrieve the last 5 sign-in attempts for the user.\n■\tCorrelate: Do the log failure reasons match the IAM code?\nPlaybook: PB-POLICY (Policy Violation)\n●\tTrigger: Lockout_Reason_Code is ConditionalAccessBlock OR PolicyViolation.\n●\tObjective: Identify the specific policy that blocked the user and the context of the attempt.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve the specific lockout event.\n2.\tQuery Azure AD Sign-in Logs: Retrieve all failed sign-in events for the user in the last 6 hours.\n3.\tQuery Azure AD Conditional Access Logs: Retrieve all failure or policyNotSatisfied evaluation logs for the user in the last 6 hours. This is the primary evidence.\nPlaybook: PB-SECURITY (Security Event)\n●\tTrigger: Lockout_Reason_Code is SIEM_Alert, ImpossibleTravel, BruteForce, OR RiskDetection.\n●\tObjective: Gather all relevant security intelligence to determine if the account is under active, malicious attack.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery SIEM Alerts: Retrieve the full, detailed alert that triggered the lockout (e.g., alert SIEM-79201).\n2.\tQuery Azure AD Sign-in Logs: Retrieve all sign-in attempts (both success and failure) for the user in the last 24 hours to establish a pattern.\n3.\tQuery HRIS Travel Records: Retrieve any active, approved travel itineraries for the user.\n4.\tQuery IAM System Logs: Retrieve all authentication attempts for the user in the last 24 hours.\nPlaybook: PB-GOVERNANCE (Governance Violation)\n●\tTrigger: Lockout_Reason_Code is Compliance_Lock, SoD_Violation, StaleAccount, OR CSPM_Action.\n●\tObjective: Identify the specific governance rule that was violated and the system that took the automated action.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery CSPM Audit Logs: Retrieve all alerts and automated remediation actions associated with the user in the last 72 hours.\n2.\tQuery Azure AD Audit Logs: Retrieve all permission changes (e.g., \"Add member to group\") for the user in the last 72 hours to identify what triggered the governance violation.\n3.\tQuery IAM System Logs: Retrieve the specific lockout/disable event log.\nPlaybook: PB-UNKNOWN (Administrative or Unknown Lock)\n●\tTrigger: Lockout_Reason_Code is NULL, Admin_Lock, OR Other.\n●\tObjective: Perform a broad, fact-finding investigation to discover a root cause when one is not provided by the IAM system.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve logs to identify which entity (a person or system) performed the lock.\n2.\tQuery Azure AD Sign-in Logs: Retrieve all sign-in attempts for the user in the last 24 hours.\n3.\tQuery SIEM Alerts: Retrieve all alerts (not just high-severity) for the user in the last 24 hours.\n4.\tQuery CSPM Audit Logs: Retrieve all alerts for the user in the last 72 hours.\n5. Exception Handling\n●\tCondition: Lockout_Reason_Code is NULL or does not match any playbook.\n○\tAction: The Service Desk Analyst MUST default to selecting PB-UNKNOWN.\n●\tCondition: A data source API is unavailable or returns an error.\n○\tAction: The Investigating Staff MUST report the data source as [Data Not Available - API Error] in its case notes and proceed with the remaining steps.\n\n\n____\n\nreturn the suggested playbook in this format \n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]",
+      "agent_config": {
+        "system_prompt": "This is the investigation playbook agent. Use the {IAM Status} as your query for the \"Playbook SOP document search tool\"  to find the relevant investigation playbook name after the user profile has been made\n\n____\n\nreturn the suggested playbook in this format \n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": false,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-14T22:08:29.854773",
+      "updated_at": "2026-04-02T14:08:50.949891",
+      "is_sub_agent": true,
+      "parent_agent_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "delegation_description": "This is the investigation playbook agent. Below is the investigation playbook \n\n___\n\nCONFIDENTIALITY: INTERNAL USE ONLY\nDocument ID: SOP-INV-001\nTitle: Investigation Playbooks for Account Unlock\nOwner: Head of IT Service Operations\nReviewing Body: IT Risk & Compliance Committee\nEffective Date: 01-NOVEMBER-2025\nVersion: 1.0\n1. Purpose and Scope\n1.1. Purpose\nThis document provides a set of standardized \"Investigation Playbooks.\" It is a primary knowledge set for IT Operations staff performing an account unlock investigation. Its purpose is to ensure that the data collection for an \"Account Unlock\" investigation is targeted, efficient, and proportionate to the initial evidence.\n1.2. Scope\nThis SOP governs the evidence-gathering phase of all \"Account Unlock\" investigations. It dictates which data sources are to be queried for which type of initial event.\n2. Audience\n●\tService Desk Level 1 / Triage Staff: Staff MUST consult this document in the initial triage phase to select the appropriate Playbook_ID based on initial findings from the IAM system.\n●\tIT Operations Level 2 / Investigation Staff: Staff MUST execute the data collection steps defined in the specific Playbook_ID assigned to the case. Staff are explicitly prohibited from querying sources not listed in the assigned playbook without documented justification and approval.\n●\tHuman Oversight Teams (IT Operations, IT Risk): This document serves as the auditable record of the standard investigation logic.\n3. Governance and Maintenance\nThis document must be reviewed quarterly by the Head of IT Service Operations in consultation with the Security Operations Center (SOC) and IT Compliance. Any new data sources (e.g., new security tools) or new IAM reason codes must be formally added to these playbooks via a change request.\n4. Investigation Playbook Matrix\nThe Service Desk Analyst will first query the Identity & Access Management (IAM) System for the Account_Status and Lockout_Reason_Code. It will then use this matrix to select the correct Playbook_ID and assign it to the case.\nPlaybook: PB-BENIGN (Benign User Error)\n●\tTrigger: Lockout_Reason_Code is BadPasswordCount OR ExpiredPassword.\n●\tObjective: Confirm the lockout is a simple user error with no other suspicious indicators.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve all authentication attempts for the user in the last 1 hour.\n2.\tQuery Azure AD Sign-in Logs: Retrieve the last 5 sign-in attempts for the user.\n■\tCorrelate: Do the log failure reasons match the IAM code?\nPlaybook: PB-POLICY (Policy Violation)\n●\tTrigger: Lockout_Reason_Code is ConditionalAccessBlock OR PolicyViolation.\n●\tObjective: Identify the specific policy that blocked the user and the context of the attempt.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve the specific lockout event.\n2.\tQuery Azure AD Sign-in Logs: Retrieve all failed sign-in events for the user in the last 6 hours.\n3.\tQuery Azure AD Conditional Access Logs: Retrieve all failure or policyNotSatisfied evaluation logs for the user in the last 6 hours. This is the primary evidence.\nPlaybook: PB-SECURITY (Security Event)\n●\tTrigger: Lockout_Reason_Code is SIEM_Alert, ImpossibleTravel, BruteForce, OR RiskDetection.\n●\tObjective: Gather all relevant security intelligence to determine if the account is under active, malicious attack.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery SIEM Alerts: Retrieve the full, detailed alert that triggered the lockout (e.g., alert SIEM-79201).\n2.\tQuery Azure AD Sign-in Logs: Retrieve all sign-in attempts (both success and failure) for the user in the last 24 hours to establish a pattern.\n3.\tQuery HRIS Travel Records: Retrieve any active, approved travel itineraries for the user.\n4.\tQuery IAM System Logs: Retrieve all authentication attempts for the user in the last 24 hours.\nPlaybook: PB-GOVERNANCE (Governance Violation)\n●\tTrigger: Lockout_Reason_Code is Compliance_Lock, SoD_Violation, StaleAccount, OR CSPM_Action.\n●\tObjective: Identify the specific governance rule that was violated and the system that took the automated action.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery CSPM Audit Logs: Retrieve all alerts and automated remediation actions associated with the user in the last 72 hours.\n2.\tQuery Azure AD Audit Logs: Retrieve all permission changes (e.g., \"Add member to group\") for the user in the last 72 hours to identify what triggered the governance violation.\n3.\tQuery IAM System Logs: Retrieve the specific lockout/disable event log.\nPlaybook: PB-UNKNOWN (Administrative or Unknown Lock)\n●\tTrigger: Lockout_Reason_Code is NULL, Admin_Lock, OR Other.\n●\tObjective: Perform a broad, fact-finding investigation to discover a root cause when one is not provided by the IAM system.\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery IAM System Logs: Retrieve logs to identify which entity (a person or system) performed the lock.\n2.\tQuery Azure AD Sign-in Logs: Retrieve all sign-in attempts for the user in the last 24 hours.\n3.\tQuery SIEM Alerts: Retrieve all alerts (not just high-severity) for the user in the last 24 hours.\n4.\tQuery CSPM Audit Logs: Retrieve all alerts for the user in the last 72 hours.\n5. Exception Handling\n●\tCondition: Lockout_Reason_Code is NULL or does not match any playbook.\n○\tAction: The Service Desk Analyst MUST default to selecting PB-UNKNOWN.\n●\tCondition: A data source API is unavailable or returns an error.\n○\tAction: The Investigating Staff MUST report the data source as [Data Not Available - API Error] in its case notes and proceed with the remaining steps.\n\n\n____\n\nreturn the suggested playbook in this format \n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]"
+    },
+    {
+      "uniq_id": "60d5a184-d6fe-4998-8689-dd8c2bcc1a39",
+      "name": "HRM Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": -24.208799999999883,
+        "y": 1246.7392
+      },
+      "nexts": [],
+      "inputs": [
+        "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/hr/employees",
+        "method": "GET",
+        "parameter_schema": {
+          "query": {
+            "name": "query",
+            "param_type": "string",
+            "description": "One of employeeId or employee full name to look up a specific employee",
+            "required": false,
+            "location": "query",
+            "default_value": "",
+            "example": "890122 or Sarah Jenkins"
+          }
+        },
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-14T22:08:53.457768",
+      "updated_at": "2026-04-02T14:08:50.950387"
+    },
+    {
+      "uniq_id": "13600491-ed0f-4d09-adb7-2a46b9d024c0",
+      "name": "Playbook SOP",
+      "type": "DOCUMENT_SEARCH",
+      "position": {
+        "x": 573.7912000000001,
+        "y": 1246.7392
+      },
+      "nexts": [],
+      "inputs": [
+        "fb15b982-e73f-4011-91e3-2326e540271c"
+      ],
+      "document_search_config": {
+        "document_collections": [],
+        "document_ids": [
+          "c9735bb5-d964-4718-b845-e040a6253bf5"
+        ],
+        "search_k": 3,
+        "search_type": "similarity",
+        "similarity_threshold": 0.7,
+        "distance_strategy": "cosine",
+        "include_metadata": true,
+        "citation_format": "inline",
+        "hybrid_search_enabled": true,
+        "search_mode": "hybrid",
+        "keyword_weight": 0.5,
+        "rrf_k": 60,
+        "full_text_config": "english",
+        "min_keyword_relevance": 0.1,
+        "use_reranking": false,
+        "rerank_top_k": 10,
+        "prompt_template": "default",
+        "custom_prompt_template": null,
+        "include_confidence_scores": true,
+        "max_context_tokens": 2000,
+        "return_full_document": false,
+        "parent_agent_id": "fb15b982-e73f-4011-91e3-2326e540271c"
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T05:56:00.931994",
+      "updated_at": "2026-04-02T14:08:50.951126"
+    },
+    {
+      "uniq_id": "65c07698-405b-4ccb-88d4-56a1289a1ca1",
+      "name": "IAM Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 167.79120000000012,
+        "y": 1246.7392
+      },
+      "nexts": [],
+      "inputs": [
+        "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/identity/users",
+        "method": "GET",
+        "parameter_schema": {
+          "query": {
+            "name": "query",
+            "param_type": "string",
+            "description": "One of userId or userPrincipalName, or commonName to look up a specific user",
+            "required": false,
+            "location": "query",
+            "default_value": "",
+            "example": "d.chen or d.chen@bank.com or David Chen"
+          }
+        },
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:24:11.084412",
+      "updated_at": "2026-04-02T14:08:50.951625"
+    },
+    {
+      "uniq_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "name": "Evidence Orchestration Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 1235.9592,
+        "y": 716.372
+      },
+      "nexts": [
+        "145a67fc-832a-42f3-8e79-4abdc0073307",
+        "64fa7a38-06b2-4c51-aef3-c3487e2a0380",
+        "f4a32ff3-b666-4603-a7a3-61bc34bb2933",
+        "d164d48a-9b91-4740-a818-0d6ded6cfe3c",
+        "2057e718-35a5-4c35-bd70-caf2617b5e5d",
+        "e7ac7722-ddc1-4d3f-b0e7-65a4f8732ab5"
+      ],
+      "inputs": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "prompt_template": "Query the investigation playbook SOP with the given ; Selected Investigation Playbook: [Selected Playbook Name].\n\nIt will contain data collection steps. For example: \n\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery CSPM Audit Logs: Retrieve all alerts and automated remediation actions associated with the user in the last 72 hours.\n2.\tQuery Azure AD Audit Logs: Retrieve all permission changes (e.g., \"Add member to group\") for the user in the last 72 hours to identify what triggered the governance violation.\n3.\tQuery IAM System Logs: Retrieve the specific lockout/disable event log.\n\nFollow the given data collection steps for  [Selected Playbook Name]. Hit each of the required HTTP Endpoint tools. And return the following: \n\nEVIDENCE GATHERING MANIFEST:\n(Data collection executed based on playbook: '[Selected Playbook Name]')\n---------------------------------\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n\n\n",
+      "agent_config": {
+        "system_prompt": "Query the investigation playbook SOP with the given ; Selected Investigation Playbook: [Selected Playbook Name].\n\nIt will contain data collection steps. For example: \n\n●\tData Collection Steps (for Investigation Staff):\n1.\tQuery CSPM Audit Logs: Retrieve all alerts and automated remediation actions associated with the user in the last 72 hours.\n2.\tQuery Azure AD Audit Logs: Retrieve all permission changes (e.g., \"Add member to group\") for the user in the last 72 hours to identify what triggered the governance violation.\n3.\tQuery IAM System Logs: Retrieve the specific lockout/disable event log.\n\nFollow the given data collection steps for  [Selected Playbook Name]. Hit each of the required HTTP Endpoint tools. And return the following: \n\nEVIDENCE GATHERING MANIFEST:\n(Data collection executed based on playbook: '[Selected Playbook Name]')\n---------------------------------\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n\n\n",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": false,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:44:32.041573",
+      "updated_at": "2026-04-02T14:08:51.008993",
+      "is_sub_agent": true,
+      "parent_agent_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "delegation_description": "Query the investigation playbook SOP with the given ; Selected Investigation Playbook: [Selected Playbook Name]."
+    },
+    {
+      "uniq_id": "145a67fc-832a-42f3-8e79-4abdc0073307",
+      "name": "Playbook SOP",
+      "type": "DOCUMENT_SEARCH",
+      "position": {
+        "x": 785.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "document_search_config": {
+        "document_collections": [],
+        "document_ids": [
+          "c9735bb5-d964-4718-b845-e040a6253bf5"
+        ],
+        "search_k": 3,
+        "search_type": "similarity",
+        "similarity_threshold": 0.7,
+        "distance_strategy": "cosine",
+        "include_metadata": true,
+        "citation_format": "inline",
+        "hybrid_search_enabled": true,
+        "search_mode": "hybrid",
+        "keyword_weight": 0.5,
+        "rrf_k": 60,
+        "full_text_config": "english",
+        "min_keyword_relevance": 0.1,
+        "use_reranking": false,
+        "rerank_top_k": 10,
+        "prompt_template": "default",
+        "custom_prompt_template": null,
+        "include_confidence_scores": true,
+        "max_context_tokens": 2000,
+        "return_full_document": false,
+        "parent_agent_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:44:42.462311",
+      "updated_at": "2026-04-02T14:08:51.009520"
+    },
+    {
+      "uniq_id": "64fa7a38-06b2-4c51-aef3-c3487e2a0380",
+      "name": "SEIM Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 1027.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/security/alerts",
+        "method": "GET",
+        "parameter_schema": {},
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:45:34.730377",
+      "updated_at": "2026-04-02T14:08:51.010030"
+    },
+    {
+      "uniq_id": "f4a32ff3-b666-4603-a7a3-61bc34bb2933",
+      "name": "CPSM Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 1219.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/cspm/alerts",
+        "method": "GET",
+        "parameter_schema": {},
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:48:51.442328",
+      "updated_at": "2026-04-02T14:08:51.010534"
+    },
+    {
+      "uniq_id": "d164d48a-9b91-4740-a818-0d6ded6cfe3c",
+      "name": "IAM Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 1411.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/identity/users",
+        "method": "GET",
+        "parameter_schema": {},
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T06:49:31.429814",
+      "updated_at": "2026-04-02T14:08:51.011045"
+    },
+    {
+      "uniq_id": "2057e718-35a5-4c35-bd70-caf2617b5e5d",
+      "name": "Azure AD Logs",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 1603.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/azure/signins",
+        "method": "GET",
+        "parameter_schema": {},
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T08:14:04.747231",
+      "updated_at": "2026-04-02T14:08:51.011570"
+    },
+    {
+      "uniq_id": "e7ac7722-ddc1-4d3f-b0e7-65a4f8732ab5",
+      "name": "HR Data",
+      "type": "HTTP_REQUEST",
+      "position": {
+        "x": 1795.9592,
+        "y": 1116.3719999999998
+      },
+      "nexts": [],
+      "inputs": [
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1"
+      ],
+      "http_request_config": {
+        "endpoint_id": null,
+        "url_template": "http://flowdemoapi-svc:8001/hr/employees",
+        "method": "GET",
+        "parameter_schema": {},
+        "headers": {},
+        "query_params": {},
+        "auth_type": "none",
+        "auth_config": {},
+        "oauth2_config": {},
+        "certificate_path": "",
+        "request_body_template": "",
+        "content_type": "",
+        "user_agent": "",
+        "encoding": "utf-8",
+        "compression": true,
+        "cookie_jar": false,
+        "timeout_seconds": 30,
+        "max_retries": 3,
+        "retry_delay": 1,
+        "retry_on_status": [
+          429,
+          500,
+          502,
+          503,
+          504
+        ],
+        "response_format": "auto",
+        "error_handling": "fail",
+        "follow_redirects": true,
+        "max_redirects": 10,
+        "verify_ssl": true,
+        "extract_path": "",
+        "response_transform": "",
+        "success_status_codes": [
+          200,
+          201,
+          202,
+          204
+        ],
+        "proxy_config": {},
+        "rate_limit": {},
+        "circuit_breaker_config": {},
+        "request_signing": {},
+        "pre_request_script": "",
+        "webhook_url": "",
+        "accept_headers": {},
+        "cache_config": {},
+        "parent_agent_id": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T08:15:01.907923",
+      "updated_at": "2026-04-02T14:08:51.012122"
+    },
+    {
+      "uniq_id": "265ddb30-6326-4171-861b-03b78549e086",
+      "name": "Investigation Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 1802.8708000000001,
+        "y": 483.356
+      },
+      "nexts": [
+        "e904477d-1459-48db-9292-1a1473f1bbf7"
+      ],
+      "inputs": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "prompt_template": "Read through the given logs. Read through the internal risk taxonomy SOP document query tool. And produce the following report: \n\nTECHNICAL ANALYSIS & FINDINGS:\n---------------------------------\n- Root Cause Identified: [Identified Root Cause Description]\n- Triggering System:     [Triggering System Name]\n- Triggering Event:      [Triggering Event ID or Name]\n- Risk Classification:   [Assigned Risk Classification]\n- Risk Level:[Assigned Risk Level]\n- Corroborating Evidence: [List of Corroborating Evidence]\n",
+      "agent_config": {
+        "system_prompt": "Read through the given logs. Read through the internal risk taxonomy SOP document query tool. And produce the following report: \n\nTECHNICAL ANALYSIS & FINDINGS:\n---------------------------------\n- Root Cause Identified: [Identified Root Cause Description]\n- Triggering System:     [Triggering System Name]\n- Triggering Event:      [Triggering Event ID or Name]\n- Risk Classification:   [Assigned Risk Classification]\n- Risk Level:[Assigned Risk Level]\n- Corroborating Evidence: [List of Corroborating Evidence]\n",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": false,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T08:23:15.927274",
+      "updated_at": "2026-04-02T14:08:51.018922",
+      "is_sub_agent": true,
+      "parent_agent_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "delegation_description": "Reads through the given logs. Reads through the internal risk taxonomy SOP document query tool. And produces the standard report."
+    },
+    {
+      "uniq_id": "e904477d-1459-48db-9292-1a1473f1bbf7",
+      "name": "Risk Taxonomy SOP",
+      "type": "DOCUMENT_SEARCH",
+      "position": {
+        "x": 1857.8708000000001,
+        "y": 883.356
+      },
+      "nexts": [],
+      "inputs": [
+        "265ddb30-6326-4171-861b-03b78549e086"
+      ],
+      "document_search_config": {
+        "document_collections": [],
+        "document_ids": [
+          "e6a0ee5e-40b3-4ce2-9f32-fbfa5b59805f"
+        ],
+        "search_k": 3,
+        "search_type": "similarity",
+        "similarity_threshold": 0.7,
+        "distance_strategy": "cosine",
+        "include_metadata": true,
+        "citation_format": "inline",
+        "hybrid_search_enabled": true,
+        "search_mode": "hybrid",
+        "keyword_weight": 0.5,
+        "rrf_k": 60,
+        "full_text_config": "english",
+        "min_keyword_relevance": 0.1,
+        "use_reranking": false,
+        "rerank_top_k": 10,
+        "prompt_template": "default",
+        "custom_prompt_template": null,
+        "include_confidence_scores": true,
+        "max_context_tokens": 2000,
+        "return_full_document": false,
+        "parent_agent_id": "265ddb30-6326-4171-861b-03b78549e086"
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T08:25:10.532555",
+      "updated_at": "2026-04-02T14:08:51.019411"
+    },
+    {
+      "uniq_id": "0d19258e-d0de-413e-9223-208233287dab",
+      "name": "Case Summary Agent",
+      "type": "AGENT",
+      "position": {
+        "x": 2453.0024,
+        "y": 485.0204
+      },
+      "nexts": [
+        "b79e5c06-f30d-4552-bee2-fa28b772e15e"
+      ],
+      "inputs": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "prompt_template": "Read through the given inputs. Query the resolution playbook SOP document query tool. And generate the final report in the following structure:\n\n**CASE SUMMARY FOR HUMAN REVIEW**\n\n**1. EXECUTIVE SUMMARY:**\n[A plain-English synthesis of what happened and why, based on the technical findings.]\n\n**2. RISK ASSESSMENT:**\n[The assessed risk level] - [A brief, plain-English justification for the risk level, based on the technical analysis.]\n\n**3. KEY INVESTIGATIVE DETAILS:**\n- Triggering Policy/Alert: [Policy Name or Alert ID]\n- User's Device:             [Device Type]\n- User's Location:           [Location from IP]\n- Target Application:        [Name of Application User Tried to Access]\n- Account Type:              [User's Account Type]\n\n**4. RECOMMENDED ACTIONS (From Resolution Playbook):**\n[\n  - Placeholder for a list of context-aware, recommended actions.\n  - The number of actions and their content are dynamically generated.\n  - This list is sourced from the Resolution Playbook based on the technical findings.\n]\n",
+      "agent_config": {
+        "system_prompt": "Read through the given inputs. Query the resolution playbook SOP document query tool. And generate the final report in the following structure:\n\n**CASE SUMMARY FOR HUMAN REVIEW**\n\n**1. EXECUTIVE SUMMARY:**\n[A plain-English synthesis of what happened and why, based on the technical findings.]\n\n**2. RISK ASSESSMENT:**\n[The assessed risk level] - [A brief, plain-English justification for the risk level, based on the technical analysis.]\n\n**3. KEY INVESTIGATIVE DETAILS:**\n- Triggering Policy/Alert: [Policy Name or Alert ID]\n- User's Device:             [Device Type]\n- User's Location:           [Location from IP]\n- Target Application:        [Name of Application User Tried to Access]\n- Account Type:              [User's Account Type]\n\n**4. RECOMMENDED ACTIONS (From Resolution Playbook):**\n[\n  - Placeholder for a list of context-aware, recommended actions.\n  - The number of actions and their content are dynamically generated.\n  - This list is sourced from the Resolution Playbook based on the technical findings.\n]\n\n---\n\nAdditional instructions:\n- Never omit any required section or field from the output, even if data is missing (use '[MISSING]' if necessary).\n- Always use the exact field names and order as shown in the template above.\n- Ensure the 'RECOMMENDED ACTIONS' list is never empty or truncated; if no actions are found, state '[MISSING]'.\n",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.1,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-06-01",
+          "deployment_name": "gpt-4.1",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "1cbcd390-fe71-4911-8dc0-ae01b951bef1",
+          "display_name": "gpt-4.1",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-4.1",
+            "api_version": "2024-06-01",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": false,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": {
+        "source_mode": "specific",
+        "source_node_id": null,
+        "source_node_ids": [
+          "265ddb30-6326-4171-861b-03b78549e086",
+          "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac"
+        ],
+        "use_structured_field": false,
+        "selected_fields": [],
+        "combine_fields_as_json": true,
+        "include_original_input": false,
+        "custom_template": null,
+        "include_node_labels": true
+      },
+      "created_at": "2025-12-17T08:30:52.977455",
+      "updated_at": "2026-04-02T14:08:51.025434",
+      "is_sub_agent": true,
+      "parent_agent_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "delegation_description": "Reads through the given inputs. Queries the resolution playbook SOP document query tool. And generate the final report in the standard structure."
+    },
+    {
+      "uniq_id": "b79e5c06-f30d-4552-bee2-fa28b772e15e",
+      "name": "Resolution Playbook SOP",
+      "type": "DOCUMENT_SEARCH",
+      "position": {
+        "x": 2502.0024,
+        "y": 885.0204
+      },
+      "nexts": [],
+      "inputs": [
+        "0d19258e-d0de-413e-9223-208233287dab"
+      ],
+      "document_search_config": {
+        "document_collections": [],
+        "document_ids": [
+          "141193b7-898d-46ed-aa33-71b29fc6c94b"
+        ],
+        "search_k": 3,
+        "search_type": "similarity",
+        "similarity_threshold": 0.7,
+        "distance_strategy": "cosine",
+        "include_metadata": true,
+        "citation_format": "inline",
+        "hybrid_search_enabled": true,
+        "search_mode": "hybrid",
+        "keyword_weight": 0.5,
+        "rrf_k": 60,
+        "full_text_config": "english",
+        "min_keyword_relevance": 0.1,
+        "use_reranking": false,
+        "rerank_top_k": 10,
+        "prompt_template": "default",
+        "custom_prompt_template": null,
+        "include_confidence_scores": true,
+        "max_context_tokens": 2000,
+        "return_full_document": false,
+        "parent_agent_id": "0d19258e-d0de-413e-9223-208233287dab"
+      },
+      "input_source_config": null,
+      "created_at": "2025-12-17T08:31:22.846952",
+      "updated_at": "2026-04-02T14:08:51.025956"
+    },
+    {
+      "uniq_id": "e234380a-a701-4ba9-8e2b-278cc62fbee2",
+      "name": "End 2",
+      "type": "END",
+      "position": {
+        "x": 2622,
+        "y": 100
+      },
+      "nexts": [],
+      "inputs": [
+        "a33efed4-7f1d-47ba-8fda-979ab043b45e"
+      ],
+      "description": "END node",
+      "end_node_config": null,
+      "created_at": "2025-12-17T08:31:42.556518",
+      "updated_at": "2026-04-02T14:08:37.304660"
+    },
+    {
+      "uniq_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "name": "Workflow Orchestrator",
+      "type": "AGENT",
+      "position": {
+        "x": 1559.1378010623557,
+        "y": 102.13780106235566
+      },
+      "nexts": [
+        "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+        "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+        "265ddb30-6326-4171-861b-03b78549e086",
+        "0d19258e-d0de-413e-9223-208233287dab",
+        "e234380a-a701-4ba9-8e2b-278cc62fbee2"
+      ],
+      "inputs": [
+        "b8d2e7d4-c14a-4dcf-baf5-eb5ad54bcd28"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "agent_config": {
+        "system_prompt": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.\n\nYou coordinate a team of agents to execute account unlock investigation requests. You will be provided with an item from the service desk request queue for account unlock investigations, you must then execute the account unlock investigation workflow as described in the following workflow. You must plan, assign and coordinate the execution of tasks by your team of agents to complete the requested task.\n\nAgentic AI Workflow: Step-by-Step\n\nBelow is the sequential list of tasks performed by the agents, culminating in the final human decision.\n\n________________________________________Task 1: Initial Triage & User Profile Enrichment\n●\tTask Description: This is the first task in the workflow, triggered automatically the moment a new case is created in EngageIQ. The Intake & Triage Agent queries the IAM and HRIS systems to build the foundational user profile. Critically, the agent also queries the IAM system for the reason for the lockout. Based on this finding, the agent consults the Investigation Playbooks (SOP) and selects the specific, appropriate investigation plan for the next step.\n●\tAssigned Agent: Intake & Triage Agent\n●\tTools Required:IAM System API, HRIS API, Investigation Playbooks (SOP)\n●\tDetailed Expected Output:\nPlaintext\nInitial Triage & User Profile Enrichment\n\nUSER PROFILE:\n---------------------------------\n- User Identifier:    [User Identifier]\n- Full Name:          [User Full Name]\n- Business Title:     [User Business Title]\n- Department:         [User Department]\n- Manager:            [User Manager Name]\n- Account Type:       [Identified Account Type]\n- Current IAM Status: [Current Account Status]\n\nINITIAL TRIAGE & PLAYBOOK SELECTION:\n---------------------------------\n- Lockout Reason (from IAM): [Lockout Reason Code or Description]\n- Selected Investigation Playbook: [Selected Playbook Name]\n\n________________________________________Task 2: Evidence Gathering\n●\tTask Description: The Evidence Orchestration Agent receives the \"Selected Investigation Playbook\" name from the previous task. It now executes only the data collection steps defined in that playbook. For example, the \"Playbook: Governance_Violation\" would instruct it to query the CSPM and Azure AD logs, but not the SIEM, making the collection process efficient and targeted. The output is a dynamic manifest of the actual data sources queried and the results.\n●\tAssigned Agent: Evidence Orchestration Agent\n●\tTools Required: SIEM API, Azure AD Logs API, CSPM API, HRIS API (as dictated by the selected playbook)\n●\tDetailed Expected Output:\nPlaintext\nEvidence Gathering\n\nEVIDENCE GATHERING MANIFEST:\n(Data collection executed based on playbook: '[Selected Playbook Name]')\n---------------------------------\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n- [Data Source Queried]: [Data Retrieval Status]\n\n________________________________________Task 3: Investigation\n●\tTask Description: The Expert Investigation Agent ingests the complete \"Evidence Packet\" from the workflow. Its job is to perform the deep analysis, correlating all the raw data points to find the causal event. It sifts through the logs to find the specific policy or alert that was triggered, then consults the internal risk taxonomy to formally classify the event and assign a risk level. The output is a technical finding.\n●\tAssigned Agent: Expert Investigation Agent\n●\tTools Required: Internal Risk Taxonomy (SOP)\n●\tDetailed Expected Output:\nPlaintext\nInvestigation\n\nTECHNICAL ANALYSIS & FINDINGS:\n---------------------------------\n- Root Cause Identified: [Identified Root Cause Description]\n\n- Triggering System:     [Triggering System Name]\n\n- Triggering Event:      [Triggering Event ID or Name]\n\n- Risk Classification:   [Assigned Risk Classification]\n\n- Risk Level:            [Assigned Risk Level]\n\n- Corroborating Evidence: [List of Corroborating Evidence]\n\n________________________________________Task 4: Generate Case Summary for Human Review\n●\tTask Description: This is the final step in the automated workflow. The Resolution Agent takes the technical findings from the previous task and translates them into a concise, plain-English summary. It synthesizes the user's profile with the root cause and risk, then consults the \"Resolution Playbook\" to provide a dynamic list of pre-approved, contextual recommendations for the human agent.\n●\tAssigned Agent: Resolution Agent\n●\tTools Required: Resolution Playbook (SOP)\n●\tDetailed Expected Output:\nPlaintext\nGenerate Case Summary for Human Review\n\n**CASE SUMMARY FOR HUMAN REVIEW**\n\n**1. EXECUTIVE SUMMARY:**\n[A plain-English synthesis of what happened and why, based on the technical findings.]\n\n**2. RISK ASSESSMENT:**\n[The assessed risk level] - [A brief, plain-English justification for the risk level, based on the technical analysis.]\n\n**3. KEY INVESTIGATIVE DETAILS:**\n- Triggering Policy/Alert: [Policy Name or Alert ID]\n- User's Device:             [Device Type]\n- User's Location:           [Location from IP]\n- Target Application:        [Name of Application User Tried to Access]\n- Account Type:              [User's Account Type]\n\n**4. RECOMMENDED ACTIONS (From Resolution Playbook):**\n[\n  - Placeholder for a list of context-aware, recommended actions.\n  - The number of actions and their content are dynamically generated.\n  - This list is sourced from the Resolution Playbook based on the technical findings.\n]\n\n________________________________________Task 5: Human Attestation & Execution\n●\tTask Description: This task is performed entirely by the human agent. After reviewing the \"Case Summary for Human Review\" (from Task 4) and the \"Recommended Actions,\" the human agent makes a final, informed decision. They then execute the required steps in the appropriate systems and document their action and justification, which serves as the final attestation and closes the loop.\n●\tAssigned Agent: Human Agent\n",
+        "max_iterations": 50,
+        "memory_enabled": true,
+        "memory_window_size": 10,
+        "memory_strategy": "thread_scoped",
+        "memory_persistence": "execution",
+        "cross_execution_memory": false,
+        "memory_summarization_enabled": false,
+        "memory_summarization_threshold": 20,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4.1",
+          "model_type": "llm",
+          "temperature": 0.3,
+          "max_tokens": null,
+          "top_p": null,
+          "reasoning_effort": null,
+          "api_base": null,
+          "api_version": "2024-12-01-preview",
+          "deployment_name": "gpt-5.2",
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "model_deployment_id": "2e18bad3-feba-4cd9-a9b2-770e5804df39",
+          "display_name": "gpt-5.2",
+          "credentials": {},
+          "config": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-5.2",
+            "api_version": "2024-12-01-preview",
+            "use_managed_identity": true
+          },
+          "additional_params": {
+            "endpoint": "https://cto-openai-demo1.openai.azure.com",
+            "deployment_name": "gpt-5.2",
+            "api_version": "2024-12-01-preview",
+            "use_managed_identity": true
+          },
+          "supports_function_calling": true,
+          "supports_streaming": true,
+          "timeout": 30,
+          "organization_id": null,
+          "max_retries": 3
+        },
+        "document_search_enabled": false,
+        "is_orchestrator": true,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [
+          "fa88a049-a81e-4afc-9ced-47fbe36a702d"
+        ],
+        "delegation_strategy": "dynamic",
+        "include_delegation_tools": true,
+        "handoff_pattern": "tool_based",
+        "share_context": true,
+        "max_delegation_depth": 3,
+        "delegation_timeout": 300,
+        "guardrails_enabled": true,
+        "review_config": null
+      },
+      "input_source_config": {
+        "source_mode": "start",
+        "source_node_id": null,
+        "source_node_ids": [],
+        "use_structured_field": false,
+        "selected_fields": [],
+        "combine_fields_as_json": true,
+        "include_original_input": false,
+        "custom_template": null,
+        "include_node_labels": true
+      },
+      "created_at": "2026-02-18T12:27:59.168058",
+      "updated_at": "2026-04-08T13:30:19.334298"
+    }
+  ],
+  "connections": [
+    {
+      "source_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "target_id": "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+      "source_handle": null,
+      "target_handle": null,
+      "label": "delegates to",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "target_id": "fb15b982-e73f-4011-91e3-2326e540271c",
+      "source_handle": null,
+      "target_handle": null,
+      "label": "delegates to",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+      "target_id": "60d5a184-d6fe-4998-8689-dd8c2bcc1a39",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "fb15b982-e73f-4011-91e3-2326e540271c",
+      "target_id": "13600491-ed0f-4d09-adb7-2a46b9d024c0",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "836ecd0e-7bdf-4501-91b7-8a1ea6f70cac",
+      "target_id": "65c07698-405b-4ccb-88d4-56a1289a1ca1",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "145a67fc-832a-42f3-8e79-4abdc0073307",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "64fa7a38-06b2-4c51-aef3-c3487e2a0380",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "f4a32ff3-b666-4603-a7a3-61bc34bb2933",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "d164d48a-9b91-4740-a818-0d6ded6cfe3c",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "2057e718-35a5-4c35-bd70-caf2617b5e5d",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "target_id": "e7ac7722-ddc1-4d3f-b0e7-65a4f8732ab5",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "265ddb30-6326-4171-861b-03b78549e086",
+      "target_id": "e904477d-1459-48db-9292-1a1473f1bbf7",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "0d19258e-d0de-413e-9223-208233287dab",
+      "target_id": "b79e5c06-f30d-4552-bee2-fa28b772e15e",
+      "source_handle": "tools",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "tool"
+    },
+    {
+      "source_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "target_id": "fa88a049-a81e-4afc-9ced-47fbe36a702d",
+      "source_handle": "delegation",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "b8d2e7d4-c14a-4dcf-baf5-eb5ad54bcd28",
+      "target_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "source_handle": null,
+      "target_handle": null,
+      "label": "",
+      "connection_type": "workflow"
+    },
+    {
+      "source_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "target_id": "08bf4b7c-30ee-4dca-99ab-d6de7dc7bee1",
+      "source_handle": "delegation",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "target_id": "265ddb30-6326-4171-861b-03b78549e086",
+      "source_handle": "delegation",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "target_id": "0d19258e-d0de-413e-9223-208233287dab",
+      "source_handle": "delegation",
+      "target_handle": "top",
+      "label": "",
+      "connection_type": "delegation"
+    },
+    {
+      "source_id": "a33efed4-7f1d-47ba-8fda-979ab043b45e",
+      "target_id": "e234380a-a701-4ba9-8e2b-278cc62fbee2",
+      "source_handle": null,
+      "target_handle": null,
+      "label": "",
+      "connection_type": "workflow"
+    }
+  ],
+  "metadata": {},
+  "created_at": "2025-12-14T11:23:11.652256",
+  "updated_at": "2026-04-08T13:30:19.334552",
+  "is_subgraph": false,
+  "max_execution_time": 3600,
+  "enable_parallel_execution": false,
+  "workflow_id": "a7156da5-90d9-4637-ab9f-feb4a809fe67",
+  "definition_id": "ee8e64bb-c9b4-4ada-8b60-2be65689bf1a"
+}

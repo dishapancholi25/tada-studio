@@ -1,0 +1,120 @@
+services:
+  # LOCAL DEV ONLY - added for local bug reproduction, not part of original repo
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "6666:5432"
+    environment:
+      - POSTGRES_DB=langgraph
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data_local_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - PORT=8000
+      - DEVELOPMENT_MODE=true
+      - LLM_GUARD_MODE=${LLM_GUARD_MODE:-local}
+      - LLM_GUARD_API_URL=http://llm-guard:8001
+      - LLM_GUARD_API_TIMEOUT=${LLM_GUARD_API_TIMEOUT:-30}
+      - LLM_GUARD_API_KEY=${LLM_GUARD_API_KEY:-local-dev-key}
+      - KEY_POSTGRES_HOST=postgres
+      - KEY_POSTGRES_DBNAME=langgraph
+      - KEY_POSTGRES_USER=postgres
+      - KEY_POSTGRES_PASSWORD=postgres
+      - KEY_POSTGRES_PORT=5432
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - ./workspace:/app/workspace
+      - ./logs:/app/logs
+    command: ["python", "-m", "backend.app"]
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+          cpus: '1.5'
+
+  llm-guard:
+    build:
+      context: ../llm-guard
+      dockerfile: Dockerfile
+      args:
+        - HF_TOKEN=${HF_TOKEN}
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - VAULT_TTL_SECONDS=3600
+      - LLM_GUARD_API_KEY=${LLM_GUARD_API_KEY:-local-dev-key}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+          cpus: '2.0'
+ 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - BACKEND_URL=http://backend:8000
+      - NODE_ENV=production
+    command: ["npm", "run", "start"]
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+    depends_on:
+      - backend
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    ports:
+      - "6006:6006"
+    volumes:
+      - phoenix-data:/data
+    environment:
+      - PHOENIX_WORKING_DIR=/data
+      - PHOENIX_PORT=6006
+      - PHOENIX_HOST_ROOT_PATH=/phoenix
+      - PHOENIX_ROOT_URL=http://localhost:8080/phoenix
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6006/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
+volumes:
+  phoenix-data:
+  postgres_data_local_dev:

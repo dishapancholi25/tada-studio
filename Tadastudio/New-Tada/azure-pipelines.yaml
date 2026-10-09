@@ -1,0 +1,264 @@
+trigger:
+  branches:
+    include:
+      - dev
+      - qa
+      - uat
+      - prod
+
+variables:
+  acrLoginServer: mashrequae.azurecr.io
+  acrServiceConnection: mashrequae
+  frontendImageName: tadastudio-frontend-app
+  backendImageName: tadastudio-backend-app
+  imageTag: $(Build.BuildId)
+
+stages:
+
+# ─── CI: Build & Push both images ───────────────────────────
+- stage: CI
+  displayName: 'CI — Build & Push'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build and Push Docker Images'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+      clean: false
+
+    - task: Docker@2
+      displayName: 'Build & Push Frontend'
+      inputs:
+        containerRegistry: '$(acrServiceConnection)'
+        repository: '$(frontendImageName)'
+        command: buildAndPush
+        Dockerfile: 'frontend/Dockerfile'
+        buildContext: 'frontend'
+        tags: |
+          $(imageTag)
+
+    - task: Docker@2
+      displayName: 'Build & Push Backend'
+      inputs:
+        containerRegistry: '$(acrServiceConnection)'
+        repository: '$(backendImageName)'
+        command: buildAndPush
+        Dockerfile: 'backend/Dockerfile'
+        buildContext: 'backend'
+        tags: |
+          $(imageTag)
+
+    - task: Bash@3
+      displayName: 'Stamp Build ID — Frontend Manifest'
+      inputs:
+        targetType: inline
+        script: |
+          sed -i "s/BUILD_ID/$(Build.BuildId)/g" frontend/k8s/deployment.yaml
+          echo "=== Frontend manifest ==="
+          cat frontend/k8s/deployment.yaml
+
+    - task: Bash@3
+      displayName: 'Stamp Build ID — Backend Manifest'
+      inputs:
+        targetType: inline
+        script: |
+          sed -i "s/BUILD_ID/$(Build.BuildId)/g" backend/k8s/deployment.yaml
+          echo "=== Backend manifest ==="
+          cat backend/k8s/deployment.yaml
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Frontend Manifest'
+      inputs:
+        PathtoPublish: 'frontend/k8s/deployment.yaml'
+        ArtifactName: manifest-frontend
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Backend Manifest'
+      inputs:
+        PathtoPublish: 'backend/k8s/deployment.yaml'
+        ArtifactName: manifest-backend
+
+# ─── CD: QA ─────────────────────────────────────────────────
+- stage: CD_QA
+  displayName: 'CD — QA'
+  dependsOn: CI
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/qa'))
+  variables:
+    namespace: tadastudio-qa
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy to AKS QA'
+    pool:
+      name: crsaiml
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Frontend Manifest'
+      inputs:
+        artifactName: manifest-frontend
+        targetPath: '$(Pipeline.Workspace)/manifest-frontend'
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Backend Manifest'
+      inputs:
+        artifactName: manifest-backend
+        targetPath: '$(Pipeline.Workspace)/manifest-backend'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Frontend (QA)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-frontend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Frontend Rollout (QA)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: rollout
+        arguments: 'status deployment/frontend-app -n $(namespace)'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Backend (QA)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-backend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Backend Rollout (QA)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: rollout
+        arguments: 'status deployment/backend-app -n $(namespace)'
+
+# ─── CD: UAT ────────────────────────────────────────────────
+- stage: CD_UAT
+  displayName: 'CD — UAT'
+  dependsOn: CI
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/uat'))
+  variables:
+    namespace: tadastudio-uat
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy to AKS UAT'
+    pool:
+      name: crsaiml
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Frontend Manifest'
+      inputs:
+        artifactName: manifest-frontend
+        targetPath: '$(Pipeline.Workspace)/manifest-frontend'
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Backend Manifest'
+      inputs:
+        artifactName: manifest-backend
+        targetPath: '$(Pipeline.Workspace)/manifest-backend'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Frontend (UAT)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-frontend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Frontend Rollout (UAT)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: rollout
+        arguments: 'status deployment/frontend-app -n $(namespace)'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Backend (UAT)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-backend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Backend Rollout (UAT)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-greychain-nonprod'
+        command: rollout
+        arguments: 'status deployment/backend-app -n $(namespace)'
+
+# ─── CD: PROD ───────────────────────────────────────────────
+- stage: CD_PROD
+  displayName: 'CD — PROD'
+  dependsOn: CI
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/prod'))
+  variables:
+    namespace: tadastudio-prod
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy to AKS PROD'
+    pool:
+      name: crsaiml
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Frontend Manifest'
+      inputs:
+        artifactName: manifest-frontend
+        targetPath: '$(Pipeline.Workspace)/manifest-frontend'
+
+    - task: DownloadPipelineArtifact@2
+      displayName: 'Download Backend Manifest'
+      inputs:
+        artifactName: manifest-backend
+        targetPath: '$(Pipeline.Workspace)/manifest-backend'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Frontend (PROD)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-tadabot-prod-aks'
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-frontend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Frontend Rollout (PROD)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-tadabot-prod-aks'
+        command: rollout
+        arguments: 'status deployment/frontend-app -n $(namespace)'
+
+    - task: Kubernetes@1
+      displayName: 'Deploy Backend (PROD)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-tadabot-prod-aks' 
+        command: apply
+        arguments: '-f $(Pipeline.Workspace)/manifest-backend/deployment.yaml -n $(namespace)'
+        secretType: dockerRegistry
+        containerRegistryType: 'Azure Container Registry'
+
+    - task: Kubernetes@1
+      displayName: 'Verify Backend Rollout (PROD)'
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'mashreq-tadabot-prod-aks' 
+        command: rollout
+        arguments: 'status deployment/backend-app -n $(namespace)'
+

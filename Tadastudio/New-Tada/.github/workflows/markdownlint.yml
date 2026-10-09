@@ -1,0 +1,16 @@
+name: Markdownlint
+
+on:
+  push:
+    paths:
+      - '**/*.md'   # any markdown changes on any branch
+  pull_request:
+    branches:
+      - main        # run for *all* PRs into main, regardless of file changes
+
+permissions:
+  contents: read
+
+jobs:
+  markdownlint:
+    uses: synechron/.github/.github/workflows/markdownlint.yaml@main

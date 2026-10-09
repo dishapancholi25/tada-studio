@@ -1,0 +1,163 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Blob Access Control - Detailed" id="blobDetailed">
+    <mxGraphModel dx="1191" dy="694" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2050" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;verticalAlign=middle;align=center;" value="&lt;b&gt;User&lt;/b&gt;" vertex="1">
+          <mxGeometry height="90" width="140" x="40" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="backend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c9daf8;strokeColor=#6c8ebf;fontSize=13;verticalAlign=middle;align=center;" value="&lt;b&gt;Tada Studio Backend&lt;/b&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="220" x="250" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="authcheck" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;verticalAlign=middle;align=center;" value="&lt;b&gt;Application Layer&lt;/b&gt;&lt;br&gt;&lt;b&gt;Authorization Check&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;check_collection_access()&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="240" x="550" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="blobclient" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;verticalAlign=middle;align=center;" value="&lt;b&gt;BlobServiceClient&lt;/b&gt;&lt;br&gt;(from_connection_string())&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Uses AccountName + AccountKey&lt;br&gt;(from AZURE_BLOB_CONNECTION_STRING)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="870" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="azureblob" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;verticalAlign=middle;align=center;" value="&lt;b&gt;Azure Blob Storage&lt;/b&gt;&lt;br&gt;(Storage Account)&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Blobs · Containers&lt;br&gt;SAS generation · Container creation&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="270" x="1220" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="etop1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="backend" value="List / Download /&#xa;View Document">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etop2" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="authcheck">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etop3" edge="1" parent="1" source="authcheck" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="blobclient" value="Access using&#xa;Connection String">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="etop4" edge="1" parent="1" source="blobclient" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="azureblob">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="groupA" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;align=center;fontSize=16;fontStyle=1;spacingTop=10;" value="1. List Documents Flow" vertex="1">
+          <mxGeometry height="600" width="470" x="30" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="groupB" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;align=center;fontSize=16;fontStyle=1;spacingTop=10;" value="2. Download / View Flow&#xa;(when document record exists)" vertex="1">
+          <mxGeometry height="600" width="520" x="530" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="groupC" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;verticalAlign=top;align=center;fontSize=16;fontStyle=1;fontColor=#990000;spacingTop=10;" value="&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 3. Fallback Flow&lt;br&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;(when document record is missing)" vertex="1">
+          <mxGeometry height="600" width="900" x="1080" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="efan1" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="a1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="efan2a" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="b1a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="efan2b" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.639;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;" target="b1b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="efan3a" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="c1a">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="efan3b" edge="1" parent="1" source="backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="c1b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=12;" value="GET /collections&#xa;(list documents)" vertex="1">
+          <mxGeometry height="60" width="380" x="75" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=12;" value="Fetch user&#39;s collections&#xa;and documents" vertex="1">
+          <mxGeometry height="60" width="380" x="75" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=12;" value="Generate SAS download link&#xa;for each document" vertex="1">
+          <mxGeometry height="60" width="380" x="75" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=#4d7331;fontColor=#ffffff;fontSize=13;fontStyle=1;" value="Return list of documents&#xa;(with download links)" vertex="1">
+          <mxGeometry height="80" width="380" x="75" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="ea1" edge="1" parent="1" source="a1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea2" edge="1" parent="1" source="a2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="a3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea3" edge="1" parent="1" source="a3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="a4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b1a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2fb;strokeColor=#6c8ebf;fontSize=12;" value="Download endpoint&#xa;(/download)" vertex="1">
+          <mxGeometry height="60" width="210" x="555" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="b1b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2fb;strokeColor=#6c8ebf;fontSize=12;" value="View endpoint&#xa;(/view)" vertex="1">
+          <mxGeometry height="60" width="210" x="800" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="b2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2fb;strokeColor=#6c8ebf;fontSize=12;" value="Resolve document download URL" vertex="1">
+          <mxGeometry height="60" width="435" x="575" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="b3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eaf2fb;strokeColor=#6c8ebf;fontSize=12;" value="Generate account-key-signed SAS&#xa;(single blob, read-only, TTL)" vertex="1">
+          <mxGeometry height="70" width="435" x="575" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="b4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#41628a;fontColor=#ffffff;fontSize=13;fontStyle=1;" value="Return SAS URL to user&#xa;(download / view document)" vertex="1">
+          <mxGeometry height="80" width="435" x="575" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="eb1" edge="1" parent="1" source="b1a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.35;entryY=0;" target="b2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb2" edge="1" parent="1" source="b1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.65;entryY=0;" target="b2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb3" edge="1" parent="1" source="b2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="b3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb4" edge="1" parent="1" source="b3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="b4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1a" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecea;strokeColor=#b85450;fontSize=12;" value="Download endpoint&#xa;(/download)" vertex="1">
+          <mxGeometry height="60" width="210" x="1110" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="c1b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecea;strokeColor=#b85450;fontSize=12;" value="View endpoint&#xa;(/view)" vertex="1">
+          <mxGeometry height="60" width="210" x="1350" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecea;strokeColor=#b85450;fontSize=12;" value="Document record not found&#xa;in database" vertex="1">
+          <mxGeometry height="60" width="430" x="1130" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecea;strokeColor=#b85450;fontSize=12;" value="Check if blob exists in storage" vertex="1">
+          <mxGeometry height="60" width="430" x="1130" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fdecea;strokeColor=#b85450;fontSize=12;" value="Try to generate SAS&#xa;(from connection string)" vertex="1">
+          <mxGeometry height="60" width="430" x="1130" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="cdiamond" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;" value="Account key&#xa;parseable?" vertex="1">
+          <mxGeometry height="120" width="230" x="1610" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Generate SAS URL&#xa;(read-only, TTL)" vertex="1">
+          <mxGeometry height="70" width="200" x="1500" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="Return plain blob URL&#xa;(no SAS)" vertex="1">
+          <mxGeometry height="70" width="200" x="1750" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b85450;strokeColor=#8a3d3a;fontColor=#ffffff;fontSize=13;fontStyle=1;" value="Return URL to user&#xa;(download / view document)" vertex="1">
+          <mxGeometry height="80" width="450" x="1500" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="ec1" edge="1" parent="1" source="c1a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.35;entryY=0;" target="c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec2" edge="1" parent="1" source="c1b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.65;entryY=0;" target="c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec3" edge="1" parent="1" source="c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec4" edge="1" parent="1" source="c3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" target="c4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec5" edge="1" parent="1" source="c4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="cdiamond">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec6" edge="1" parent="1" source="cdiamond" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;fontColor=#2e7d32;labelBackgroundColor=#ffffff;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" target="c6" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec7" edge="1" parent="1" source="cdiamond" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;fontColor=#c0392b;labelBackgroundColor=#ffffff;exitX=0.7;exitY=1;entryX=0.5;entryY=0;" target="c7" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec8" edge="1" parent="1" source="c6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.3;entryY=0;" target="c8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ec9" edge="1" parent="1" source="c7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.7;entryY=0;" target="c8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

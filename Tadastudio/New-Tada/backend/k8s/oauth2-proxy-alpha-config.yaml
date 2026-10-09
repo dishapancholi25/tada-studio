@@ -1,0 +1,52 @@
+# oauth2-proxy alpha configuration for injecting a trusted-proxy shared
+# secret alongside the identity headers, so the backend can verify that
+# X-Auth-Request-Email / X-Auth-Request-Groups actually came from oauth2-proxy
+# and were not spoofed by a client request (PDF Finding 1.3 mitigation).
+#
+# Usage:
+#   1. Store this as a ConfigMap:
+#        kubectl create configmap oauth2-proxy-alpha-config \
+#          --from-file=alpha-config.yaml=oauth2-proxy-alpha-config.yaml \
+#          -n tadastudio-uat
+#   2. Mount it into the oauth2-proxy pod and reference it via the
+#      `--alpha-config=/etc/oauth2-proxy/alpha-config.yaml` flag (requires
+#      oauth2-proxy >= 7.4). Example deployment snippet:
+#
+#        containers:
+#          - name: oauth2-proxy
+#            args:
+#              - --alpha-config=/etc/oauth2-proxy/alpha-config.yaml
+#            volumeMounts:
+#              - name: alpha-config
+#                mountPath: /etc/oauth2-proxy
+#        volumes:
+#          - name: alpha-config
+#            configMap:
+#              name: oauth2-proxy-alpha-config
+#
+#   3. Replace <BASE64_SHARED_SECRET> below with the base64-encoded value of
+#      the SAME secret configured as AUTH_PROXY_SHARED_SECRET on the backend
+#      (generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"
+#      then base64-encode it, e.g. `echo -n "<secret>" | base64`).
+#
+# IMPORTANT rollout order: deploy this oauth2-proxy config FIRST and confirm
+# the header is reaching the backend before setting AUTH_PROXY_SHARED_SECRET
+# on the backend deployment. Enforcing the secret before oauth2-proxy injects
+# it will cause all header-based auth to fall back to JWT validation, which
+# can lock out users if JWKS/Azure AD validation isn't fully configured.
+injectRequestHeaders:
+  - name: X-Auth-Proxy-Secret
+    values:
+      - value: <BASE64_SHARED_SECRET>
+  - name: X-Auth-Request-Email
+    values:
+      - claim: email
+  - name: X-Auth-Request-Groups
+    values:
+      - claim: groups
+  - name: X-Auth-Request-User
+    values:
+      - claim: user
+  - name: X-Auth-Request-Access-Token
+    values:
+      - claim: access_token

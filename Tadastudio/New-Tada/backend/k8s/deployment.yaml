@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+      - name: backend-app
+        image: mashrequae.azurecr.io/tadastudio-backend-app:BUILD_ID
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: docker-secret

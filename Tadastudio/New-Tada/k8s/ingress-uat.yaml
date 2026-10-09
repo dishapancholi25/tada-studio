@@ -1,0 +1,106 @@
+####################################################################
+# Tada Studio – UAT Ingress
+#
+# Source of truth for the UAT Ingress object.
+#
+# Apply:
+#   kubectl apply -f k8s/ingress-uat.yaml
+#
+# Namespace: tadastudio-uat
+# Cluster:   SHAREDSERVICES-01-AKS-UAT
+# Host:      tadastudio.uat.mashreqdev.com
+#
+# Architecture:
+#   Browser → nginx Ingress Controller → oauth-proxy-svc:4180
+#     oauth2-proxy upstream routing:
+#       /api/*  → backend-svc
+#       /ws/*   → backend-svc
+#       /*      → frontend-svc
+#
+#   Exception (PAT-authenticated, bypasses oauth2-proxy):
+#       /api/http-execution/trigger*  → backend-svc directly
+####################################################################
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: tadastudio-uat
+  annotations:
+    # --- TLS ---
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+    # --- Proxy behaviour ---
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.org/proxy-read-timeout: "3600"
+    nginx.org/proxy-send-timeout: "3600"
+    nginx.org/websocket-services: oauth-proxy-svc
+    nginx.org.client-max-body-size: "100m"
+
+    # --- nginx snippet (applied to every location in this Ingress) ---
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      # WebSocket upgrade support
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+      # ---------------------------------------------------------------
+      # ISG Finding 1.9 – Strip oauth2-proxy internal auth headers
+      # from responses so they are never exposed to browser JavaScript.
+      #
+      # These headers carry the live Entra ID access token and user
+      # identity on the oauth2-proxy → backend hop. They must not
+      # reach the client.
+      #
+      # See: docs/for-agents/implementation-summaries/ISG_1_9_TOKEN_EXPOSURE_FIX.md
+      # ---------------------------------------------------------------
+      proxy_hide_header X-Auth-Request-Access-Token;
+      proxy_hide_header X-Auth-Request-Email;
+      proxy_hide_header X-Auth-Request-User;
+      proxy_hide_header X-Auth-Request-Username;
+      proxy_hide_header X-Auth-Request-Preferred-Username;
+      proxy_hide_header X-Auth-Request-Groups;
+      proxy_hide_header X-Forwarded-Access-Token;
+
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - tadastudio.uat.mashreqdev.com
+      secretName: tada-uat-tls-secret
+  rules:
+    - host: tadastudio.uat.mashreqdev.com
+      http:
+        paths:
+          # --- Public HTTP Execution (PAT auth, no oauth2-proxy) ---
+          - path: /api/http-execution/trigger
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 80
+          - path: /api/http-execution/trigger-form
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 80
+          - path: /api/http-execution/trigger-sse
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 80
+
+          # --- Everything else → oauth2-proxy (handles auth) ---
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: oauth-proxy-svc
+                port:
+                  number: 4180

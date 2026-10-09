@@ -1,0 +1,856 @@
+{
+  "name": "WF-Email-Triage-v7.9.1 (Copy)TadaTeam",
+  "description": "",
+  "nodes": [
+    {
+      "uniq_id": "d11792d8-d9fb-49e1-bead-27dee17deb24",
+      "name": "Start",
+      "type": "START",
+      "position": {
+        "x": -1589.050730696799,
+        "y": 67.24445806882522
+      },
+      "nexts": [
+        "0db8093d-3630-4c6a-aaff-640d9d3b21fe"
+      ],
+      "created_at": "2026-06-12T04:06:31.837400",
+      "updated_at": "2026-09-07T12:23:38.405599"
+    },
+    {
+      "uniq_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd",
+      "name": "Case Type",
+      "type": "AGENT",
+      "position": {
+        "x": 3891.602156586741,
+        "y": 18.60466483921968
+      },
+      "nexts": [
+        "a9d6338a-df84-4395-8301-f46b6cae5b4b",
+        "41e11522-64e3-48f2-8bc9-5229d1f09209"
+      ],
+      "inputs": [
+        "f9a4b617-1b66-4643-aeeb-1fddd765a946",
+        "1c648abe-0304-4bc3-84d1-9d05a43098cd",
+        "c3404ca4-84eb-4088-91e9-9bdfb287d436"
+      ],
+      "description": "You are a helpful AI assistant. Please respond to the user's message thoughtfully and accurately.",
+      "agent_config": {
+        "system_prompt": "Case Type Agent",
+        "max_iterations": 50,
+        "memory_enabled": false,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-5.1"
+        },
+        "is_orchestrator": true,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [
+          "a9d6338a-df84-4395-8301-f46b6cae5b4b"
+        ]
+      },
+      "created_at": "2026-07-30T05:28:17.506261",
+      "updated_at": "2026-09-07T13:21:13.631581"
+    },
+    {
+      "uniq_id": "41e11522-64e3-48f2-8bc9-5229d1f09209",
+      "name": "Case Sub Type and Service Type",
+      "type": "AGENT",
+      "position": {
+        "x": 4650.406898086956,
+        "y": -25.117690795938074
+      },
+      "nexts": [
+        "a72bccc3-072a-4bf0-9d40-158193c2143c",
+        "4860d27c-dba6-49ac-9e93-36d1de9bac45",
+        "5d6cf77c-f46f-4041-90e7-0e2ad5652fde"
+      ],
+      "inputs": [
+        "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd"
+      ],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [
+          "a72bccc3-072a-4bf0-9d40-158193c2143c",
+          "4860d27c-dba6-49ac-9e93-36d1de9bac45"
+        ]
+      },
+      "created_at": "2026-07-30T05:28:26.741729",
+      "updated_at": "2026-09-09T08:57:26.963980"
+    },
+    {
+      "uniq_id": "a9d6338a-df84-4395-8301-f46b6cae5b4b",
+      "name": "Case Type Sub Agent",
+      "type": "AGENT",
+      "position": { "x": 3874.91754570854, "y": 382.3924083091346 },
+      "nexts": [],
+      "inputs": ["426fade0-9bba-4fdb-bbec-bbd50ee3f5dd"],
+      "description": "Detect Case Type Agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd",
+      "delegation_description": "Detect Case Type Agent",
+      "created_at": "2026-07-30T05:30:26.104953",
+      "updated_at": "2026-09-07T13:21:13.631673"
+    },
+    {
+      "uniq_id": "a72bccc3-072a-4bf0-9d40-158193c2143c",
+      "name": "Taxonomy Classification Sub-Agent",
+      "type": "AGENT",
+      "position": { "x": 4421.162603874361, "y": 381.1275065583875 },
+      "nexts": ["142b528f-5e47-47aa-abd6-2f4f209b492b"],
+      "inputs": ["41e11522-64e3-48f2-8bc9-5229d1f09209"],
+      "description": "Case subtype sub agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "41e11522-64e3-48f2-8bc9-5229d1f09209",
+      "delegation_description": "Case subtype sub agent",
+      "created_at": "2026-07-30T05:30:53.652232",
+      "updated_at": "2026-09-07T13:07:35.367513"
+    },
+    {
+      "uniq_id": "142b528f-5e47-47aa-abd6-2f4f209b492b",
+      "name": "Case Sub and Serv Def",
+      "type": "DOCUMENT_SEARCH",
+      "position": { "x": 4515.452707041446, "y": 745.465568398266 },
+      "nexts": [],
+      "inputs": ["a72bccc3-072a-4bf0-9d40-158193c2143c"],
+      "document_search_config": {
+        "document_collections": ["1e390ee2-2998-42cb-91ab-7d14ec5578c0"],
+        "search_k": 20,
+        "search_type": "similarity",
+        "parent_agent_id": "a72bccc3-072a-4bf0-9d40-158193c2143c"
+      },
+      "created_at": "2026-07-30T06:04:00.859958",
+      "updated_at": "2026-09-09T08:19:41.276984"
+    },
+    {
+      "uniq_id": "c3404ca4-84eb-4088-91e9-9bdfb287d436",
+      "name": "Customer Data Extraction Agent",
+      "type": "AGENT",
+      "position": { "x": 3397.125967404976, "y": 295.69578551545214 },
+      "nexts": ["426fade0-9bba-4fdb-bbec-bbd50ee3f5dd"],
+      "inputs": ["1c648abe-0304-4bc3-84d1-9d05a43098cd"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-06-24T10:31:26.876923",
+      "updated_at": "2026-09-07T12:23:38.409762"
+    },
+    {
+      "uniq_id": "1c648abe-0304-4bc3-84d1-9d05a43098cd",
+      "name": "Is Verified",
+      "type": "CONDITION",
+      "position": { "x": 3053.6148261940243, "y": 3.2532319903002644 },
+      "nexts": [
+        "c3404ca4-84eb-4088-91e9-9bdfb287d436",
+        "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd"
+      ],
+      "inputs": ["e1a70005-5555-4a55-8a55-000000000005"],
+      "description": "CONDITION node",
+      "condition_config": {
+        "branch_mode": "binary",
+        "input_source": "specific",
+        "source_node_id": "e1a70005-5555-4a55-8a55-000000000005",
+        "field_path": "customer_is_verified",
+        "comparison_operator": "=="
+      },
+      "false_next": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd",
+      "created_at": "2026-06-24T11:59:33.206779",
+      "updated_at": "2026-09-07T12:23:38.409900"
+    },
+    {
+      "uniq_id": "5d6cf77c-f46f-4041-90e7-0e2ad5652fde",
+      "name": "Product Classification",
+      "type": "AGENT",
+      "position": { "x": 5444.186245595824, "y": 39.692801240189084 },
+      "nexts": [
+        "43eae7c3-446a-4b92-9dda-04efd7db0900",
+        "e3a8f356-acc6-4e73-889e-b33fb357722c"
+      ],
+      "description": "prdouct type and sub type",
+      "delegation_description": "prdouct type and sub type",
+      "created_at": "2026-07-11T10:57:14.299717",
+      "updated_at": "2026-09-07T12:29:56.836261"
+    },
+    {
+      "uniq_id": "43eae7c3-446a-4b92-9dda-04efd7db0900",
+      "name": "Repeat check & Case Summarization Orchastrator",
+      "type": "AGENT",
+      "position": { "x": 5862.085745141862, "y": 41.10609301042942 },
+      "nexts": [
+        "f0e1d2c3-b4a5-4968-8788-0a0b0c0d0e0f",
+        "66dd704f-f17f-40b6-ba60-768beb56c739"
+      ],
+      "inputs": ["5d6cf77c-f46f-4041-90e7-0e2ad5652fde"],
+      "description": "Lightweight wrapper that invokes the WF-Repeat-Check-v1.0 sub-workflow.",
+      "created_at": "2026-07-12T09:33:57.798759",
+      "updated_at": "2026-09-07T12:29:51.820867"
+    },
+    {
+      "uniq_id": "16b3cfd4-5293-4e0f-a9f3-fe1e2b017a5a",
+      "name": "For each 1",
+      "type": "FOR_EACH",
+      "position": { "x": -832.922902156781, "y": 64.585777416117 },
+      "nexts": ["7f6306e5-baf4-4932-96f5-cc3f5ca9aca7"],
+      "inputs": ["0db8093d-3630-4c6a-aaff-640d9d3b21fe"],
+      "description": "FOR_EACH node",
+      "for_each_config": {
+        "source_mode": "previous",
+        "source_node_id": "1114b837-8a9b-4a58-88b2-53ca08deac94",
+        "field_path": "fields.results",
+        "concurrency_limit": 15,
+        "rate_limit_per_second": 12,
+        "max_iterations": 1000,
+        "error_strategy": "continue_on_error",
+        "max_retries_per_item": 0,
+        "body_node_ids": [
+          "3cc0743e-b4ec-4a25-b2f8-9709e742592c",
+          "41e11522-64e3-48f2-8bc9-5229d1f09209",
+          "3af3cba7-f968-4666-87ac-9bb8f7919c0e",
+          "b0e7e2ed-73d0-4294-ae4a-7ff602d3f6ca",
+          "a9d6338a-df84-4395-8301-f46b6cae5b4b",
+          "8879c660-6885-453c-b4a6-4f055eb09fcf",
+          "c3404ca4-84eb-4088-91e9-9bdfb287d436",
+          "f0e1d2c3-b4a5-4968-8788-0a0b0c0d0e0f",
+          "0ffe3752-aab3-4074-bfa7-a14c881641f8",
+          "43eae7c3-446a-4b92-9dda-04efd7db0900",
+          "0bc6049c-3712-4cac-87a9-28942f75f0e5",
+          "3b928915-3b23-441c-b954-54155b08c05d",
+          "422e586a-2f31-4852-9619-0f126ff2ba01",
+          "d0e1d1ce-9956-47cb-a955-d2f56941c4dc",
+          "1c648abe-0304-4bc3-84d1-9d05a43098cd",
+          "b8c6663e-446a-4895-8098-d0bbcee22d2e",
+          "f4b6c0a1-fdbd-41f6-82bf-c133ad0772fb",
+          "0c30fadc-14a8-4207-87a2-60bd6c111224",
+          "573554db-20e3-433a-8c71-1fecab19baea",
+          "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd",
+          "6ba7d788-7e2e-4f3d-8469-772b03b689da",
+          "34b928f7-48fd-4a54-a384-5468df6b6ece",
+          "4860d27c-dba6-49ac-9e93-36d1de9bac45",
+          "6f274e94-86ec-4def-b307-458840f2bc46",
+          "5d6cf77c-f46f-4041-90e7-0e2ad5652fde",
+          "ba6bc419-a999-496a-a40a-41a04cee24ac",
+          "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7",
+          "142b528f-5e47-47aa-abd6-2f4f209b492b",
+          "66dd704f-f17f-40b6-ba60-768beb56c739",
+          "a72bccc3-072a-4bf0-9d40-158193c2143c",
+          "9233b18d-b225-4c99-8996-5113649122ea",
+          "e1a70001-1111-4a11-8a11-000000000001",
+          "e1a70002-2222-4a22-8a22-000000000002",
+          "e1a70003-3333-4a33-8a33-000000000003",
+          "e1a70004-4444-4a44-8a44-000000000004",
+          "e1a70005-5555-4a55-8a55-000000000005"
+        ],
+        "body_entry_node_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7",
+        "body_exit_node_ids": ["f2c01507-0f72-4a18-88a8-7f6c3c1ca178"]
+      },
+      "created_at": "2026-07-26T15:57:27.409514",
+      "updated_at": "2026-09-10T07:00:46.708719"
+    },
+    {
+      "uniq_id": "34b928f7-48fd-4a54-a384-5468df6b6ece",
+      "name": "Customer Upsert Agent",
+      "type": "AGENT",
+      "position": { "x": 462.78653075697804, "y": -14.495834716117614 },
+      "nexts": [
+        "6f274e94-86ec-4def-b307-458840f2bc46",
+        "9233b18d-b225-4c99-8996-5113649122ea"
+      ],
+      "inputs": ["e1a70001-1111-4a11-8a11-000000000001"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-06T11:00:57.555078",
+      "updated_at": "2026-09-07T12:23:38.413407"
+    },
+    {
+      "uniq_id": "6f274e94-86ec-4def-b307-458840f2bc46",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 470.40328555669015, "y": 451.8653254432357 },
+      "nexts": [],
+      "inputs": ["34b928f7-48fd-4a54-a384-5468df6b6ece"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["cases", "customers"],
+        "allowed_operations": ["SELECT", "INSERT", "DELETE", "UPDATE"],
+        "parent_agent_id": "34b928f7-48fd-4a54-a384-5468df6b6ece"
+      },
+      "created_at": "2026-08-06T11:01:06.768635",
+      "updated_at": "2026-09-07T12:23:38.413512"
+    },
+    {
+      "uniq_id": "9233b18d-b225-4c99-8996-5113649122ea",
+      "name": "Case Insert Agent",
+      "type": "AGENT",
+      "position": { "x": 883.1355358338338, "y": -3.6820476444847543 },
+      "nexts": [
+        "f4b6c0a1-fdbd-41f6-82bf-c133ad0772fb",
+        "e1a70002-2222-4a22-8a22-000000000002"
+      ],
+      "inputs": ["34b928f7-48fd-4a54-a384-5468df6b6ece"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-06T11:13:10.581152",
+      "updated_at": "2026-09-08T11:38:02.728934"
+    },
+    {
+      "uniq_id": "e1a70002-2222-4a22-8a22-000000000002",
+      "name": "Translation Agent",
+      "type": "AGENT",
+      "position": { "x": 1301.7591099358824, "y": -3.7542117168161866 },
+      "nexts": [
+        "e1a70003-3333-4a33-8a33-000000000003",
+        "c5a5a74e-0b04-4b4a-9c50-68628fa1fa93"
+      ],
+      "inputs": ["9233b18d-b225-4c99-8996-5113649122ea"],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "delegated_agents": [
+          "b0e7e2ed-73d0-4294-ae4a-7ff602d3f6ca",
+          "c5a5a74e-0b04-4b4a-9c50-68628fa1fa93"
+        ]
+      },
+      "created_at": "2026-09-03T13:04:05.094961",
+      "updated_at": "2026-09-07T12:23:38.415040"
+    },
+    {
+      "uniq_id": "e1a70003-3333-4a33-8a33-000000000003",
+      "name": "Email Cleaning Agent",
+      "type": "AGENT",
+      "position": { "x": 1718.9616973768261, "y": 2.366657954292961 },
+      "nexts": [
+        "e1a70004-4444-4a44-8a44-000000000004",
+        "02905598-806d-4d50-9e04-24930c3f681a"
+      ],
+      "inputs": ["e1a70002-2222-4a22-8a22-000000000002"],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "delegated_agents": [
+          "3cc0743e-b4ec-4a25-b2f8-9709e742592c",
+          "02905598-806d-4d50-9e04-24930c3f681a"
+        ]
+      },
+      "created_at": "2026-09-03T13:04:05.094961",
+      "updated_at": "2026-09-07T12:23:38.415721"
+    },
+    {
+      "uniq_id": "e1a70004-4444-4a44-8a44-000000000004",
+      "name": "Text Analysis Agent",
+      "type": "AGENT",
+      "position": { "x": 2128.530476318299, "y": 11.928091428107223 },
+      "nexts": [
+        "e1a70005-5555-4a55-8a55-000000000005",
+        "927a1054-64a8-4b8f-be1e-645fcfea5e1a"
+      ],
+      "inputs": ["e1a70003-3333-4a33-8a33-000000000003"],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "delegated_agents": [
+          "3af3cba7-f968-4666-87ac-9bb8f7919c0e",
+          "927a1054-64a8-4b8f-be1e-645fcfea5e1a"
+        ]
+      },
+      "created_at": "2026-09-03T13:04:05.094961",
+      "updated_at": "2026-09-07T12:23:38.416399"
+    },
+    {
+      "uniq_id": "e1a70005-5555-4a55-8a55-000000000005",
+      "name": "Sentiment Agent",
+      "type": "AGENT",
+      "position": { "x": 2558.596832320434, "y": 11.997205785770944 },
+      "nexts": [
+        "1c648abe-0304-4bc3-84d1-9d05a43098cd",
+        "664e8d2d-7bf9-4188-84b9-b52a62bb8ca7"
+      ],
+      "inputs": ["e1a70004-4444-4a44-8a44-000000000004"],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "delegated_agents": [
+          "6ba7d788-7e2e-4f3d-8469-772b03b689da",
+          "664e8d2d-7bf9-4188-84b9-b52a62bb8ca7"
+        ]
+      },
+      "created_at": "2026-09-03T13:04:05.094961",
+      "updated_at": "2026-09-07T12:23:38.417111"
+    },
+    {
+      "uniq_id": "f4b6c0a1-fdbd-41f6-82bf-c133ad0772fb",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 899.1432884245323, "y": 418.7145677997267 },
+      "nexts": [],
+      "inputs": ["9233b18d-b225-4c99-8996-5113649122ea"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["case_types", "cases"],
+        "allowed_operations": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "parent_agent_id": "9233b18d-b225-4c99-8996-5113649122ea"
+      },
+      "created_at": "2026-08-06T11:13:27.048444",
+      "updated_at": "2026-09-07T12:23:38.417204"
+    },
+    {
+      "uniq_id": "3b928915-3b23-441c-b954-54155b08c05d",
+      "name": "Triage Insert Agent",
+      "type": "AGENT",
+      "position": { "x": 6745.765421649037, "y": 40.81913443030564 },
+      "nexts": [
+        "0c30fadc-14a8-4207-87a2-60bd6c111224",
+        "b1a4ec3e-8011-4784-877d-128806c1dbff"
+      ],
+      "inputs": ["66dd704f-f17f-40b6-ba60-768beb56c739"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-06T11:15:33.322453",
+      "updated_at": "2026-09-07T13:17:59.632152"
+    },
+    {
+      "uniq_id": "0c30fadc-14a8-4207-87a2-60bd6c111224",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 6765.2624742393255, "y": 489.43155716980584 },
+      "nexts": [],
+      "inputs": ["3b928915-3b23-441c-b954-54155b08c05d"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": [
+          "service_type",
+          "case_sub_type",
+          "ai_sentiment",
+          "ai_tone",
+          "priorities",
+          "triage_statuses",
+          "triages",
+          "case_types"
+        ],
+        "allowed_operations": ["SELECT", "INSERT", "DELETE", "UPDATE"],
+        "parent_agent_id": "3b928915-3b23-441c-b954-54155b08c05d"
+      },
+      "created_at": "2026-08-06T11:16:49.810099",
+      "updated_at": "2026-09-07T12:29:44.186301"
+    },
+    {
+      "uniq_id": "ba6bc419-a999-496a-a40a-41a04cee24ac",
+      "name": "Classification Insert + Case Update Agent",
+      "type": "AGENT",
+      "position": { "x": 7473.573689831088, "y": 72.72336495346562 },
+      "nexts": [
+        "422e586a-2f31-4852-9619-0f126ff2ba01",
+        "b8c6663e-446a-4895-8098-d0bbcee22d2e"
+      ],
+      "inputs": ["b1a4ec3e-8011-4784-877d-128806c1dbff"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-06T11:18:32.322559",
+      "updated_at": "2026-09-07T12:29:22.168270"
+    },
+    {
+      "uniq_id": "422e586a-2f31-4852-9619-0f126ff2ba01",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 7497.943995003341, "y": 521.4842309788656 },
+      "nexts": [],
+      "inputs": ["ba6bc419-a999-496a-a40a-41a04cee24ac"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["ai_classifications", "cases"],
+        "allowed_operations": ["SELECT", "INSERT", "DELETE", "UPDATE"],
+        "parent_agent_id": "ba6bc419-a999-496a-a40a-41a04cee24ac"
+      },
+      "created_at": "2026-08-06T11:19:25.774442",
+      "updated_at": "2026-09-07T12:29:22.168869"
+    },
+    {
+      "uniq_id": "f2c01507-0f72-4a18-88a8-7f6c3c1ca178",
+      "name": "End",
+      "type": "END",
+      "position": { "x": 8447.883591362981, "y": 121.45865155713437 },
+      "nexts": [],
+      "inputs": ["b8c6663e-446a-4895-8098-d0bbcee22d2e"],
+      "description": "END node",
+      "created_at": "2026-08-07T07:26:13.357825",
+      "updated_at": "2026-09-07T12:29:15.136511"
+    },
+    {
+      "uniq_id": "66dd704f-f17f-40b6-ba60-768beb56c739",
+      "name": "Priority Agent",
+      "type": "AGENT",
+      "position": { "x": 6330.546134766592, "y": 28.943133904490935 },
+      "nexts": [
+        "0ffe3752-aab3-4074-bfa7-a14c881641f8",
+        "3b928915-3b23-441c-b954-54155b08c05d"
+      ],
+      "inputs": ["43eae7c3-446a-4b92-9dda-04efd7db0900"],
+      "description": "You are a helpful AI assistant.",
+      "agent_config": {
+        "is_orchestrator": true,
+        "delegated_agents": ["0ffe3752-aab3-4074-bfa7-a14c881641f8"]
+      },
+      "created_at": "2026-08-12T10:42:10.252597",
+      "updated_at": "2026-09-07T12:29:46.928926"
+    },
+    {
+      "uniq_id": "0ffe3752-aab3-4074-bfa7-a14c881641f8",
+      "name": "Priority Sub Agent",
+      "type": "AGENT",
+      "position": { "x": 6337.980889537944, "y": 496.2951654065456 },
+      "nexts": [],
+      "inputs": ["66dd704f-f17f-40b6-ba60-768beb56c739"],
+      "description": "Priority Classification Sub Agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "66dd704f-f17f-40b6-ba60-768beb56c739",
+      "delegation_description": "Priority Classification Sub Agent",
+      "created_at": "2026-08-12T10:50:23.390599",
+      "updated_at": "2026-09-07T12:29:49.397229"
+    },
+    {
+      "uniq_id": "0db8093d-3630-4c6a-aaff-640d9d3b21fe",
+      "name": "Unprocessed Case ID Fetcher",
+      "type": "AGENT",
+      "position": { "x": -1272.4935496163662, "y": 17.62524859262345 },
+      "nexts": [
+        "e7bd9671-8346-49dd-9967-a8adcd791b52",
+        "16b3cfd4-5293-4e0f-a9f3-fe1e2b017a5a"
+      ],
+      "inputs": ["d11792d8-d9fb-49e1-bead-27dee17deb24"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-18T12:36:12.321399",
+      "updated_at": "2026-09-09T09:57:21.491511"
+    },
+    {
+      "uniq_id": "e7bd9671-8346-49dd-9967-a8adcd791b52",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": -1267.2354074874663, "y": 403.8024738701488 },
+      "nexts": [],
+      "inputs": ["0db8093d-3630-4c6a-aaff-640d9d3b21fe"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["crm_ingested_cases"],
+        "allowed_operations": ["SELECT"],
+        "parent_agent_id": "0db8093d-3630-4c6a-aaff-640d9d3b21fe"
+      },
+      "created_at": "2026-08-18T12:47:40.531554",
+      "updated_at": "2026-09-07T12:23:38.422542"
+    },
+    {
+      "uniq_id": "b8c6663e-446a-4895-8098-d0bbcee22d2e",
+      "name": "Mark-Processed Agent",
+      "type": "AGENT",
+      "position": { "x": 7932.460426481338, "y": 73.28824367804538 },
+      "nexts": [
+        "f2c01507-0f72-4a18-88a8-7f6c3c1ca178",
+        "d0e1d1ce-9956-47cb-a955-d2f56941c4dc"
+      ],
+      "inputs": ["ba6bc419-a999-496a-a40a-41a04cee24ac"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-18T13:59:47.429422",
+      "updated_at": "2026-09-07T12:29:15.137182"
+    },
+    {
+      "uniq_id": "d0e1d1ce-9956-47cb-a955-d2f56941c4dc",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 7956.5121846864395, "y": 513.6468080671818 },
+      "nexts": [],
+      "inputs": ["b8c6663e-446a-4895-8098-d0bbcee22d2e"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["crm_ingested_cases"],
+        "allowed_operations": ["SELECT", "UPDATE", "DELETE", "INSERT"],
+        "parent_agent_id": "b8c6663e-446a-4895-8098-d0bbcee22d2e"
+      },
+      "created_at": "2026-08-18T14:00:08.677355",
+      "updated_at": "2026-09-07T12:29:17.701982"
+    },
+    {
+      "uniq_id": "4860d27c-dba6-49ac-9e93-36d1de9bac45",
+      "name": "Taxonomy Combination Validation Sub-Agent",
+      "type": "AGENT",
+      "position": { "x": 4898.542700385567, "y": 373.0479024031953 },
+      "nexts": ["0bc6049c-3712-4cac-87a9-28942f75f0e5"],
+      "inputs": ["41e11522-64e3-48f2-8bc9-5229d1f09209"],
+      "description": "Validated if the Taxonomy Exists or not",
+      "is_sub_agent": true,
+      "parent_agent_id": "41e11522-64e3-48f2-8bc9-5229d1f09209",
+      "delegation_description": "Validated if the Taxonomy Exists or not",
+      "created_at": "2026-08-24T14:35:27.210817",
+      "updated_at": "2026-09-08T10:26:12.936666"
+    },
+    {
+      "uniq_id": "0bc6049c-3712-4cac-87a9-28942f75f0e5",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": 5004.148259539681, "y": 720.800628856512 },
+      "nexts": [],
+      "inputs": ["4860d27c-dba6-49ac-9e93-36d1de9bac45"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["case_types", "case_sub_type", "service_type"],
+        "allowed_operations": ["SELECT"],
+        "parent_agent_id": "4860d27c-dba6-49ac-9e93-36d1de9bac45"
+      },
+      "created_at": "2026-08-24T14:35:36.460645",
+      "updated_at": "2026-09-09T08:19:37.627234"
+    },
+    {
+      "uniq_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7",
+      "name": "Fetch Case",
+      "type": "AGENT",
+      "position": { "x": -402.2905487259029, "y": -16.76721990564961 },
+      "nexts": [
+        "573554db-20e3-433a-8c71-1fecab19baea",
+        "e1a70001-1111-4a11-8a11-000000000001"
+      ],
+      "inputs": ["16b3cfd4-5293-4e0f-a9f3-fe1e2b017a5a"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-08-25T09:10:46.677211",
+      "updated_at": "2026-09-09T11:07:30.724950"
+    },
+    {
+      "uniq_id": "e1a70001-1111-4a11-8a11-000000000001",
+      "name": "Input Schema Mapper",
+      "type": "AGENT",
+      "position": { "x": 22.923801676637254, "y": -16.525782605313154 },
+      "nexts": ["34b928f7-48fd-4a54-a384-5468df6b6ece"],
+      "inputs": ["7f6306e5-baf4-4932-96f5-cc3f5ca9aca7"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-09-03T13:04:05.094961",
+      "updated_at": "2026-09-07T12:23:38.424838"
+    },
+    {
+      "uniq_id": "573554db-20e3-433a-8c71-1fecab19baea",
+      "name": "Database Query",
+      "type": "DATABASE_QUERY",
+      "position": { "x": -410.3326953774992, "y": 409.92037388192324 },
+      "nexts": [],
+      "inputs": ["7f6306e5-baf4-4932-96f5-cc3f5ca9aca7"],
+      "database_query_config": {
+        "connection_id": "db384f35-6055-43f0-91be-1c5ec013084d",
+        "table_names": ["crm_ingested_cases"],
+        "allowed_operations": ["SELECT"],
+        "parent_agent_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7"
+      },
+      "created_at": "2026-08-25T09:11:00.999692",
+      "updated_at": "2026-09-07T12:23:38.424937"
+    },
+    {
+      "uniq_id": "e3a8f356-acc6-4e73-889e-b33fb357722c",
+      "name": "CRMProductAccountFetch",
+      "type": "HTTP_REQUEST",
+      "position": { "x": 5446.181416338682, "y": 517.0757684843711 },
+      "nexts": [],
+      "inputs": ["5d6cf77c-f46f-4041-90e7-0e2ad5652fde"],
+      "http_request_config": {
+        "url_template": "https://internal.apigateway.cibg.mashreqdev.com/mashreqtest/uae/crmoperations/v1/CRMConnectOperations",
+        "method": "POST",
+        "auth_type": "oauth2",
+        "oauth2_config": {
+          "client_id": "REDACTED",
+          "client_secret": "REDACTED",
+          "token_url": "https://internal.apigateway.cibg.mashreqdev.com/mashreqtest/uae/oauth-v6/oauth2/token",
+          "scope": "CRM",
+          "verify_ssl": false
+        },
+        "parent_agent_id": "5d6cf77c-f46f-4041-90e7-0e2ad5652fde"
+      },
+      "created_at": "2026-07-24T09:04:35.810093",
+      "updated_at": "2026-09-07T12:30:02.393928"
+    },
+    {
+      "uniq_id": "b1a4ec3e-8011-4784-877d-128806c1dbff",
+      "name": "DB-Insertion-Success",
+      "type": "CONDITION",
+      "position": { "x": 7120.341903648168, "y": -349.46896699768513 },
+      "nexts": [
+        "ba6bc419-a999-496a-a40a-41a04cee24ac",
+        "ceced533-5dd0-4a83-8ba9-786dbfa58fa1"
+      ],
+      "inputs": ["3b928915-3b23-441c-b954-54155b08c05d"],
+      "description": "CONDITION node",
+      "condition_config": {
+        "branch_mode": "binary",
+        "input_source": "specific",
+        "source_node_id": "3b928915-3b23-441c-b954-54155b08c05d",
+        "field_path": "triage_insert_success"
+      },
+      "false_next": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1",
+      "created_at": "2026-09-02T10:53:38.062974",
+      "updated_at": "2026-09-07T12:29:37.794373"
+    },
+    {
+      "uniq_id": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1",
+      "name": "Re-Run",
+      "type": "AGENT",
+      "position": { "x": 7897.182761429, "y": -568.1710933461095 },
+      "nexts": [
+        "44412e3c-d5ba-48b4-90b0-54117772038c",
+        "d5aec80d-3c10-4058-9c97-2b338119050e"
+      ],
+      "inputs": ["b1a4ec3e-8011-4784-877d-128806c1dbff"],
+      "description": "You are a helpful AI assistant.",
+      "created_at": "2026-09-02T11:32:50.475015",
+      "updated_at": "2026-09-07T12:29:26.584290"
+    },
+    {
+      "uniq_id": "44412e3c-d5ba-48b4-90b0-54117772038c",
+      "name": "End 1",
+      "type": "END",
+      "position": { "x": 8376.38350688839, "y": -505.11421705172773 },
+      "nexts": [],
+      "inputs": ["ceced533-5dd0-4a83-8ba9-786dbfa58fa1"],
+      "description": "END node",
+      "created_at": "2026-09-02T12:16:24.699176",
+      "updated_at": "2026-09-07T12:29:26.584229"
+    },
+    {
+      "uniq_id": "d5aec80d-3c10-4058-9c97-2b338119050e",
+      "name": "HTTP Request",
+      "type": "HTTP_REQUEST",
+      "position": { "x": 7914.956751757152, "y": -208.95770281024355 },
+      "nexts": [],
+      "inputs": ["ceced533-5dd0-4a83-8ba9-786dbfa58fa1"],
+      "http_request_config": {
+        "url_template": "https://tadastudio.uat.mashreqdev.com/api/http-execution/trigger/410ee850-8c10-4832-bc63-7ed70b8bba3a",
+        "method": "POST",
+        "auth_type": "bearer",
+        "auth_config": {
+          "key": "REDACTED",
+          "token": "REDACTED"
+        },
+        "parent_agent_id": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1"
+      },
+      "created_at": "2026-09-03T07:02:17.228543",
+      "updated_at": "2026-09-07T12:29:29.258758"
+    },
+    {
+      "uniq_id": "c5a5a74e-0b04-4b4a-9c50-68628fa1fa93",
+      "name": "Translation Agent",
+      "type": "AGENT",
+      "position": { "x": 1303.1076794853664, "y": 360.29375712219974 },
+      "nexts": [],
+      "inputs": ["e1a70002-2222-4a22-8a22-000000000002"],
+      "description": "The sub agent that is used for translation",
+      "is_sub_agent": true,
+      "parent_agent_id": "e1a70002-2222-4a22-8a22-000000000002",
+      "delegation_description": "The sub agent that is used for translation",
+      "created_at": "2026-09-04T05:02:01.521709",
+      "updated_at": "2026-09-07T12:23:38.426180"
+    },
+    {
+      "uniq_id": "02905598-806d-4d50-9e04-24930c3f681a",
+      "name": "Email Cleaner",
+      "type": "AGENT",
+      "position": { "x": 1714.0767055760605, "y": 373.0255527358536 },
+      "nexts": [],
+      "inputs": ["e1a70003-3333-4a33-8a33-000000000003"],
+      "description": "Email Cleaning and Re Writing Sub Agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "e1a70003-3333-4a33-8a33-000000000003",
+      "delegation_description": "Email Cleaning and Re Writing Sub Agent",
+      "created_at": "2026-09-04T05:06:19.285223",
+      "updated_at": "2026-09-07T12:23:38.426749"
+    },
+    {
+      "uniq_id": "927a1054-64a8-4b8f-be1e-645fcfea5e1a",
+      "name": "Text Analyzer",
+      "type": "AGENT",
+      "position": { "x": 2134.1475358464145, "y": 371.4791507678307 },
+      "nexts": [],
+      "inputs": ["e1a70004-4444-4a44-8a44-000000000004"],
+      "description": "Text Analyzer Sub Agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "e1a70004-4444-4a44-8a44-000000000004",
+      "delegation_description": "Text Analyzer Sub Agent",
+      "created_at": "2026-09-04T05:27:19.110811",
+      "updated_at": "2026-09-07T12:23:38.427280"
+    },
+    {
+      "uniq_id": "664e8d2d-7bf9-4188-84b9-b52a62bb8ca7",
+      "name": "Sentiment Analysis Sub Agent",
+      "type": "AGENT",
+      "position": { "x": 2548.483505716464, "y": 369.30106710662506 },
+      "nexts": [],
+      "inputs": ["e1a70005-5555-4a55-8a55-000000000005"],
+      "description": "Sentiment Analysis Agent",
+      "is_sub_agent": true,
+      "parent_agent_id": "e1a70005-5555-4a55-8a55-000000000005",
+      "delegation_description": "Sentiment Analysis Agent",
+      "created_at": "2026-09-04T05:31:06.894351",
+      "updated_at": "2026-09-07T12:23:38.427694"
+    },
+    {
+      "uniq_id": "f0e1d2c3-b4a5-4968-8788-0a0b0c0d0e0f",
+      "name": "WF-Repeat-Check-v1.0",
+      "type": "SUBWORKFLOW",
+      "position": { "x": 5954.325515389321, "y": 509.04299455240397 },
+      "nexts": [],
+      "inputs": ["43eae7c3-446a-4b92-9dda-04efd7db0900"],
+      "description": "Repeat/duplicate detection, historical-case analysis and customer-history summarisation sub-workflow.",
+      "subworkflow_config": {
+        "workflow_name": "WF-Repeat-Check-v1.0",
+        "delegation_description": "Perform repeat/duplicate detection and customer-history summarisation for the current case and return the decision fields.",
+        "timeout": 600,
+        "share_context": true,
+        "max_retries": 1,
+        "parent_agent_id": "43eae7c3-446a-4b92-9dda-04efd7db0900",
+        "target_workflow_id": "de803072-2cf1-4d7f-9161-77f9dba3ed3a"
+      },
+      "created_at": "2026-09-07T00:00:00.000000",
+      "updated_at": "2026-09-08T13:51:47.920211"
+    }
+  ],
+  "connections": [
+    { "source_id": "1c648abe-0304-4bc3-84d1-9d05a43098cd", "target_id": "c3404ca4-84eb-4088-91e9-9bdfb287d436", "source_handle": "branch-1", "connection_type": "workflow" },
+    { "source_id": "1c648abe-0304-4bc3-84d1-9d05a43098cd", "target_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd", "source_handle": "branch-0", "connection_type": "workflow" },
+    { "source_id": "c3404ca4-84eb-4088-91e9-9bdfb287d436", "target_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd", "connection_type": "workflow" },
+    { "source_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd", "target_id": "a9d6338a-df84-4395-8301-f46b6cae5b4b", "source_handle": "delegation", "target_handle": "top", "connection_type": "delegation" },
+    { "source_id": "a72bccc3-072a-4bf0-9d40-158193c2143c", "target_id": "142b528f-5e47-47aa-abd6-2f4f209b492b", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "41e11522-64e3-48f2-8bc9-5229d1f09209", "target_id": "a72bccc3-072a-4bf0-9d40-158193c2143c", "source_handle": "delegation", "target_handle": "top", "connection_type": "delegation" },
+    { "source_id": "9233b18d-b225-4c99-8996-5113649122ea", "target_id": "f4b6c0a1-fdbd-41f6-82bf-c133ad0772fb", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "3b928915-3b23-441c-b954-54155b08c05d", "target_id": "0c30fadc-14a8-4207-87a2-60bd6c111224", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "ba6bc419-a999-496a-a40a-41a04cee24ac", "target_id": "422e586a-2f31-4852-9619-0f126ff2ba01", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "34b928f7-48fd-4a54-a384-5468df6b6ece", "target_id": "6f274e94-86ec-4def-b307-458840f2bc46", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "43eae7c3-446a-4b92-9dda-04efd7db0900", "target_id": "66dd704f-f17f-40b6-ba60-768beb56c739", "connection_type": "workflow" },
+    { "source_id": "66dd704f-f17f-40b6-ba60-768beb56c739", "target_id": "0ffe3752-aab3-4074-bfa7-a14c881641f8", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "34b928f7-48fd-4a54-a384-5468df6b6ece", "target_id": "9233b18d-b225-4c99-8996-5113649122ea", "connection_type": "workflow" },
+    { "source_id": "66dd704f-f17f-40b6-ba60-768beb56c739", "target_id": "3b928915-3b23-441c-b954-54155b08c05d", "connection_type": "workflow" },
+    { "source_id": "d11792d8-d9fb-49e1-bead-27dee17deb24", "target_id": "0db8093d-3630-4c6a-aaff-640d9d3b21fe", "connection_type": "workflow" },
+    { "source_id": "0db8093d-3630-4c6a-aaff-640d9d3b21fe", "target_id": "e7bd9671-8346-49dd-9967-a8adcd791b52", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "0db8093d-3630-4c6a-aaff-640d9d3b21fe", "target_id": "16b3cfd4-5293-4e0f-a9f3-fe1e2b017a5a", "target_handle": "input", "connection_type": "workflow" },
+    { "source_id": "ba6bc419-a999-496a-a40a-41a04cee24ac", "target_id": "b8c6663e-446a-4895-8098-d0bbcee22d2e", "connection_type": "workflow" },
+    { "source_id": "b8c6663e-446a-4895-8098-d0bbcee22d2e", "target_id": "f2c01507-0f72-4a18-88a8-7f6c3c1ca178", "connection_type": "workflow" },
+    { "source_id": "b8c6663e-446a-4895-8098-d0bbcee22d2e", "target_id": "d0e1d1ce-9956-47cb-a955-d2f56941c4dc", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "4860d27c-dba6-49ac-9e93-36d1de9bac45", "target_id": "0bc6049c-3712-4cac-87a9-28942f75f0e5", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7", "target_id": "573554db-20e3-433a-8c71-1fecab19baea", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "16b3cfd4-5293-4e0f-a9f3-fe1e2b017a5a", "target_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7", "source_handle": "output", "connection_type": "workflow" },
+    { "source_id": "5d6cf77c-f46f-4041-90e7-0e2ad5652fde", "target_id": "43eae7c3-446a-4b92-9dda-04efd7db0900", "connection_type": "workflow" },
+    { "source_id": "5d6cf77c-f46f-4041-90e7-0e2ad5652fde", "target_id": "e3a8f356-acc6-4e73-889e-b33fb357722c", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "3b928915-3b23-441c-b954-54155b08c05d", "target_id": "b1a4ec3e-8011-4784-877d-128806c1dbff", "connection_type": "workflow" },
+    { "source_id": "b1a4ec3e-8011-4784-877d-128806c1dbff", "target_id": "ba6bc419-a999-496a-a40a-41a04cee24ac", "source_handle": "branch-0", "connection_type": "workflow" },
+    { "source_id": "b1a4ec3e-8011-4784-877d-128806c1dbff", "target_id": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1", "source_handle": "branch-1", "connection_type": "workflow" },
+    { "source_id": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1", "target_id": "44412e3c-d5ba-48b4-90b0-54117772038c", "connection_type": "workflow" },
+    { "source_id": "7f6306e5-baf4-4932-96f5-cc3f5ca9aca7", "target_id": "e1a70001-1111-4a11-8a11-000000000001", "connection_type": "workflow" },
+    { "source_id": "e1a70001-1111-4a11-8a11-000000000001", "target_id": "34b928f7-48fd-4a54-a384-5468df6b6ece", "connection_type": "workflow" },
+    { "source_id": "9233b18d-b225-4c99-8996-5113649122ea", "target_id": "e1a70002-2222-4a22-8a22-000000000002", "connection_type": "workflow" },
+    { "source_id": "e1a70002-2222-4a22-8a22-000000000002", "target_id": "e1a70003-3333-4a33-8a33-000000000003", "connection_type": "workflow" },
+    { "source_id": "e1a70003-3333-4a33-8a33-000000000003", "target_id": "e1a70004-4444-4a44-8a44-000000000004", "connection_type": "workflow" },
+    { "source_id": "e1a70004-4444-4a44-8a44-000000000004", "target_id": "e1a70005-5555-4a55-8a55-000000000005", "connection_type": "workflow" },
+    { "source_id": "e1a70005-5555-4a55-8a55-000000000005", "target_id": "1c648abe-0304-4bc3-84d1-9d05a43098cd", "connection_type": "workflow" },
+    { "source_id": "e1a70002-2222-4a22-8a22-000000000002", "target_id": "c5a5a74e-0b04-4b4a-9c50-68628fa1fa93", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "e1a70003-3333-4a33-8a33-000000000003", "target_id": "02905598-806d-4d50-9e04-24930c3f681a", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "e1a70004-4444-4a44-8a44-000000000004", "target_id": "927a1054-64a8-4b8f-be1e-645fcfea5e1a", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "e1a70005-5555-4a55-8a55-000000000005", "target_id": "664e8d2d-7bf9-4188-84b9-b52a62bb8ca7", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "ceced533-5dd0-4a83-8ba9-786dbfa58fa1", "target_id": "d5aec80d-3c10-4058-9c97-2b338119050e", "source_handle": "tools", "target_handle": "top", "connection_type": "tool" },
+    { "source_id": "43eae7c3-446a-4b92-9dda-04efd7db0900", "target_id": "f0e1d2c3-b4a5-4968-8788-0a0b0c0d0e0f", "source_handle": "workflow", "target_handle": "input", "connection_type": "tool" },
+    { "source_id": "41e11522-64e3-48f2-8bc9-5229d1f09209", "target_id": "4860d27c-dba6-49ac-9e93-36d1de9bac45", "label": "delegates to", "connection_type": "delegation" },
+    { "source_id": "41e11522-64e3-48f2-8bc9-5229d1f09209", "target_id": "5d6cf77c-f46f-4041-90e7-0e2ad5652fde", "connection_type": "workflow" },
+    { "source_id": "426fade0-9bba-4fdb-bbec-bbd50ee3f5dd", "target_id": "41e11522-64e3-48f2-8bc9-5229d1f09209", "connection_type": "workflow" }
+  ],
+  "metadata": {},
+  "created_at": "2026-06-12T04:06:31.837347",
+  "updated_at": "2026-09-10T07:00:46.708775",
+  "is_subgraph": false,
+  "max_execution_time": 3600,
+  "enable_parallel_execution": false,
+  "workflow_id": "fe545f6a-f748-4f0c-a533-db90980ea5d1",
+  "definition_id": "d2b7f583-c36c-4d92-863d-002fd2ec683d"
+}

@@ -1,0 +1,42 @@
+# This file adds the demo API service
+# Use with: docker compose -f docker-compose.yml -f docker-compose.demo.yml up --build
+
+services:
+  demo-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - DEMO_API_PORT=8001
+      - PYTHONOPTIMIZE=1
+      - PYTHONDONTWRITEBYTECODE=1
+    # Share static directory for demo assets
+    volumes:
+      - ./backend/static:/app/backend/static
+      - ./logs:/app/logs
+    # Override the default command to run demo API server
+    command: ["python", "-m", "backend.demo_api_server"]
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.1'
+    restart: unless-stopped
+    # Join the main agentic-studio network so the backend can reach this
+    # service by the hostname 'flowdemoapi-svc' (the name used in HTTP REQUEST
+    # tool URLs configured in workflows).
+    networks:
+      default: {}
+      agentic-studio_main:
+        aliases:
+          - flowdemoapi-svc
+
+networks:
+  agentic-studio_main:
+    external: true
+    name: agentic-studio_default

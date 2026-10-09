@@ -1,0 +1,175 @@
+{
+  "name": "SubTest",
+  "description": "Test workflow with orchestrator, sub-agent, and structured output",
+  "nodes": [
+    {
+      "uniq_id": "8b6cc87f-ec1a-4136-b60d-65302d21ea86",
+      "name": "Start",
+      "type": "START",
+      "description": "",
+      "nexts": [
+        "ecee1c8b-cf19-4b53-8616-d65eddddcf89"
+      ],
+      "inputs": [],
+      "is_sub_agent": false,
+      "is_subworkflow": false,
+      "parent_agent_id": null,
+      "delegation_description": ""
+    },
+    {
+      "uniq_id": "ecee1c8b-cf19-4b53-8616-d65eddddcf89",
+      "name": "Agent 1",
+      "type": "AGENT",
+      "description": "Orchestrator agent with sub-agent delegation and structured output",
+      "nexts": [
+        "6b6fed69-246c-44be-873d-6ff712a81b4b",
+        "6e497c9d-7463-47ef-ae8b-668ddee7fa54"
+      ],
+      "inputs": [
+        "8b6cc87f-ec1a-4136-b60d-65302d21ea86"
+      ],
+      "is_sub_agent": false,
+      "is_subworkflow": false,
+      "parent_agent_id": null,
+      "delegation_description": "",
+      "agent_config": {
+        "agent_type": "conversational",
+        "system_prompt": "Use your Math Assistant subagent for any math related queries, no matter how simple",
+        "max_iterations": 10,
+        "temperature": 0,
+        "tools": [],
+        "memory_enabled": false,
+        "tool_binding_mode": "none",
+        "parallel_tool_calls": false,
+        "tool_call_timeout": 30,
+        "is_orchestrator": true,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [
+          "6e497c9d-7463-47ef-ae8b-668ddee7fa54"
+        ],
+        "delegation_strategy": "dynamic",
+        "include_delegation_tools": true,
+        "handoff_pattern": "tool_based",
+        "share_context": true,
+        "max_delegation_depth": 3,
+        "delegation_timeout": 300,
+        "structured_outputs": [
+          {
+            "model_name": "MathResult",
+            "description": "Structured output for math calculations",
+            "fields": [
+              {
+                "name": "answer",
+                "type": "str",
+                "description": "The computed answer",
+                "required": true
+              },
+              {
+                "name": "explanation",
+                "type": "str",
+                "description": "Step-by-step explanation of how the answer was computed",
+                "required": true
+              },
+              {
+                "name": "confidence",
+                "type": "float",
+                "description": "Confidence score between 0 and 1",
+                "required": false,
+                "default": 1.0
+              }
+            ]
+          }
+        ],
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4",
+          "temperature": 0,
+          "max_tokens": null,
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "api_version": "2024-10-21",
+          "timeout": 120
+        }
+      }
+    },
+    {
+      "uniq_id": "6b6fed69-246c-44be-873d-6ff712a81b4b",
+      "name": "End 2",
+      "type": "END",
+      "description": "END node",
+      "nexts": [],
+      "inputs": [
+        "ecee1c8b-cf19-4b53-8616-d65eddddcf89"
+      ],
+      "is_sub_agent": false,
+      "is_subworkflow": false,
+      "parent_agent_id": null,
+      "delegation_description": ""
+    },
+    {
+      "uniq_id": "6e497c9d-7463-47ef-ae8b-668ddee7fa54",
+      "name": "Math Expert",
+      "type": "AGENT",
+      "description": "Call this agent for any math related query",
+      "nexts": [],
+      "inputs": [
+        "ecee1c8b-cf19-4b53-8616-d65eddddcf89"
+      ],
+      "is_sub_agent": true,
+      "is_subworkflow": false,
+      "parent_agent_id": "ecee1c8b-cf19-4b53-8616-d65eddddcf89",
+      "delegation_description": "Call this agent for any math related query",
+      "agent_config": {
+        "agent_type": "conversational",
+        "system_prompt": "Answer the input math question",
+        "max_iterations": 10,
+        "temperature": 0,
+        "tools": [],
+        "memory_enabled": false,
+        "tool_binding_mode": "none",
+        "parallel_tool_calls": false,
+        "tool_call_timeout": 30,
+        "is_orchestrator": false,
+        "orchestrator_mode": "supervisor",
+        "delegated_agents": [],
+        "delegation_strategy": "dynamic",
+        "include_delegation_tools": true,
+        "handoff_pattern": "tool_based",
+        "share_context": true,
+        "max_delegation_depth": 3,
+        "delegation_timeout": 300,
+        "llm_config": {
+          "provider": "azure_openai",
+          "model_name": "gpt-4",
+          "temperature": 0,
+          "max_tokens": null,
+          "api_key_env_var": "MODEL_DEPLOYMENT",
+          "base_url_env_var": "MODEL_DEPLOYMENT",
+          "api_version": "2024-10-21",
+          "timeout": 120
+        }
+      }
+    }
+  ],
+  "connections": [
+    {
+      "source_id": "8b6cc87f-ec1a-4136-b60d-65302d21ea86",
+      "target_id": "ecee1c8b-cf19-4b53-8616-d65eddddcf89",
+      "connection_type": "workflow",
+      "label": ""
+    },
+    {
+      "source_id": "ecee1c8b-cf19-4b53-8616-d65eddddcf89",
+      "target_id": "6b6fed69-246c-44be-873d-6ff712a81b4b",
+      "connection_type": "workflow",
+      "label": ""
+    },
+    {
+      "source_id": "ecee1c8b-cf19-4b53-8616-d65eddddcf89",
+      "target_id": "6e497c9d-7463-47ef-ae8b-668ddee7fa54",
+      "connection_type": "delegation",
+      "label": "delegates to"
+    }
+  ],
+  "default_llm_config": null
+}

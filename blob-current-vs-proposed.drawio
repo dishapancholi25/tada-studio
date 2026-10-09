@@ -1,0 +1,161 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="cur-vs-prop" name="Current vs Proposed">
+    <mxGraphModel dx="1935" dy="1128" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t1" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;" value="Current System (Existing)" vertex="1">
+          <mxGeometry height="50" width="470" x="200" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;" value="Proposed System (Only Changed Parts)" vertex="1">
+          <mxGeometry height="50" width="650" x="1040" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="l_user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=16;align=left;spacingLeft=148;arcSize=10;" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;(Web / App)" vertex="1">
+          <mxGeometry height="90" width="310" x="185" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l_user_ic" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#4a6080;strokeColor=#4a6080;" value="" vertex="1">
+          <mxGeometry height="62" width="42" x="255" y="103" as="geometry" />
+        </mxCell>
+        <mxCell id="l_backend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=16;arcSize=10;" value="&lt;b&gt;Tada Backend (AKS Pod)&lt;/b&gt;&lt;br&gt;(Existing application logic)" vertex="1">
+          <mxGeometry height="90" width="323" x="185" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="l_db" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=18;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=15;align=left;spacingLeft=78;verticalAlign=middle;" value="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;br&gt;• User&lt;br&gt;• Collection&lt;br&gt;• Document&lt;br&gt;• Access checks" vertex="1">
+          <mxGeometry height="175" width="228" x="607" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="l_db_ic" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#4a6080;strokeColor=#4a6080;" value="" vertex="1">
+          <mxGeometry height="50" width="42" x="623" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="l_auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbd5d5;strokeColor=#d94a4a;strokeWidth=2;fontSize=17;arcSize=10;" value="&lt;b&gt;Authenticate to Azure&lt;br&gt;using Storage Account Key&lt;/b&gt;&lt;br&gt;(Connection string)" vertex="1">
+          <mxGeometry height="104" width="349" x="185" y="388" as="geometry" />
+        </mxCell>
+        <mxCell id="l_sas" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbd5d5;strokeColor=#d94a4a;strokeWidth=2;fontSize=17;arcSize=10;" value="&lt;b&gt;Generate SAS&lt;br&gt;using Account Key&lt;/b&gt;" vertex="1">
+          <mxGeometry height="94" width="336" x="185" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="l_blob" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fbd5d5;strokeColor=#d94a4a;strokeWidth=2;fontSize=16;align=left;spacingLeft=110;arcSize=10;" value="&lt;b&gt;Azure Blob Storage&lt;/b&gt;&lt;br&gt;(Access via account key)" vertex="1">
+          <mxGeometry height="96" width="353" x="185" y="672" as="geometry" />
+        </mxCell>
+        <mxCell id="l_blob_ic" parent="1" style="image;aspect=fixed;html=1;image=img/lib/azure2/storage/Storage_Accounts.svg;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="217" y="689" as="geometry" />
+        </mxCell>
+        <mxCell id="l_doc" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=12;fillColor=#e3eaf5;strokeColor=#4a6080;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="54" width="44" x="69" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="l_saslbl" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=15;" value="&lt;b&gt;SAS URL&lt;/b&gt;&lt;br&gt;(returned to user)" vertex="1">
+          <mxGeometry height="50" width="160" x="11" y="402" as="geometry" />
+        </mxCell>
+        <mxCell id="le1" edge="1" parent="1" source="l_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="l_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="le2" edge="1" parent="1" source="l_backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=block;startFill=1;endArrow=block;endFill=1;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="l_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="le3" edge="1" parent="1" source="l_backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="l_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="le4" edge="1" parent="1" source="l_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="l_sas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="le5" edge="1" parent="1" source="l_sas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="l_blob">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="le6" edge="1" parent="1" source="l_blob" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeWidth=2;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="l_saslbl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="91" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="le7" edge="1" parent="1" source="l_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l_user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="91" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="mid_arrow" parent="1" style="shape=singleArrow;whiteSpace=wrap;html=1;arrowWidth=0.5;arrowSize=0.45;fillColor=#b5b5b5;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="82" width="60" x="835" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="r_group" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#2e7d32;strokeWidth=2;dashed=1;arcSize=4;" value="" vertex="1">
+          <mxGeometry height="410" width="428" x="1062" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="r_user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=16;align=left;spacingLeft=156;arcSize=10;" value="&lt;b&gt;User&lt;/b&gt;&lt;br&gt;(Web / App)" vertex="1">
+          <mxGeometry height="90" width="327" x="1077" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="r_user_ic" parent="1" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#4a6080;strokeColor=#4a6080;" value="" vertex="1">
+          <mxGeometry height="62" width="42" x="1155" y="103" as="geometry" />
+        </mxCell>
+        <mxCell id="r_backend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=16;arcSize=10;" value="&lt;b&gt;Tada Backend (AKS Pod)&lt;/b&gt;&lt;br&gt;(Existing application logic)" vertex="1">
+          <mxGeometry height="90" width="335" x="1077" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="r_db" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=18;fillColor=#e3eaf5;strokeColor=#6c84b0;strokeWidth=2;fontSize=15;align=left;spacingLeft=78;verticalAlign=middle;" value="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;br&gt;• User&lt;br&gt;• Collection&lt;br&gt;• Document&lt;br&gt;• Access checks" vertex="1">
+          <mxGeometry height="175" width="233" x="1513" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="r_db_ic" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#4a6080;strokeColor=#4a6080;" value="" vertex="1">
+          <mxGeometry height="50" width="42" x="1529" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="r_auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f0c4;strokeColor=#4c9a2a;strokeWidth=2;fontSize=17;arcSize=10;" value="&lt;b&gt;Authenticate to Azure&lt;br&gt;using Managed Identity&lt;/b&gt;&lt;br&gt;(via AKS Workload Identity)" vertex="1">
+          <mxGeometry height="104" width="395" x="1077" y="388" as="geometry" />
+        </mxCell>
+        <mxCell id="r_sas" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f0c4;strokeColor=#4c9a2a;strokeWidth=2;fontSize=17;arcSize=10;" value="&lt;b&gt;Generate User Delegation Key&lt;br&gt;and create SAS&lt;/b&gt;&lt;br&gt;(User Delegation SAS)" vertex="1">
+          <mxGeometry height="106" width="395" x="1077" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="r_blob" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5f0c4;strokeColor=#4c9a2a;strokeWidth=2;fontSize=16;align=left;spacingLeft=132;arcSize=10;" value="&lt;b&gt;Azure Blob Storage&lt;/b&gt;&lt;br&gt;(Access via Azure RBAC)" vertex="1">
+          <mxGeometry height="94" width="395" x="1077" y="672" as="geometry" />
+        </mxCell>
+        <mxCell id="r_blob_ic" parent="1" style="image;aspect=fixed;html=1;image=img/lib/azure2/storage/Storage_Accounts.svg;" value="" vertex="1">
+          <mxGeometry height="60" width="60" x="1128" y="689" as="geometry" />
+        </mxCell>
+        <mxCell id="r_doc" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=12;fillColor=#e3eaf5;strokeColor=#4a6080;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="54" width="44" x="959" y="346" as="geometry" />
+        </mxCell>
+        <mxCell id="r_saslbl" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=15;" value="&lt;b&gt;SAS URL&lt;/b&gt;&lt;br&gt;(returned to user)" vertex="1">
+          <mxGeometry height="50" width="160" x="901" y="402" as="geometry" />
+        </mxCell>
+        <mxCell id="re1" edge="1" parent="1" source="r_user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="r_backend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="re2" edge="1" parent="1" source="r_backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=block;startFill=1;endArrow=block;endFill=1;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="r_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="re3" edge="1" parent="1" source="r_backend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;" target="r_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="re4" edge="1" parent="1" source="r_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#2e7d32;" target="r_sas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="re5" edge="1" parent="1" source="r_sas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#2e7d32;" target="r_blob">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="re6" edge="1" parent="1" source="r_blob" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeWidth=2;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="r_saslbl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="981" y="719" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="re7" edge="1" parent="1" source="r_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="r_user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="981" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lg_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#8c8c8c;strokeWidth=2;dashed=1;arcSize=8;" value="" vertex="1">
+          <mxGeometry height="78" width="315" x="1445" y="795" as="geometry" />
+        </mxCell>
+        <mxCell id="lg_b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bcd4f0;strokeColor=#6c84b0;arcSize=20;" value="" vertex="1">
+          <mxGeometry height="24" width="48" x="1462" y="803" as="geometry" />
+        </mxCell>
+        <mxCell id="lg_bt" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="Existing&amp;nbsp;" vertex="1">
+          <mxGeometry height="24" width="220" x="1524" y="803" as="geometry" />
+        </mxCell>
+        <mxCell id="lg_g" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b9e6a0;strokeColor=#4c9a2a;arcSize=20;" value="" vertex="1">
+          <mxGeometry height="24" width="48" x="1462" y="837" as="geometry" />
+        </mxCell>
+        <mxCell id="lg_gt" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;" value="Changed in proposed solution" vertex="1">
+          <mxGeometry height="24" width="230" x="1524" y="837" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

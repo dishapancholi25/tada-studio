@@ -1,0 +1,165 @@
+name: Flow Driven Development
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  # Green label - Trivial task
+  # Auto-implement and merge without human review
+  green-trivial:
+    if: github.event.label.name == 'green'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          prompt: |
+            Implement the changes described in this issue. This is a trivial task that should be straightforward to complete.
+
+            Instructions:
+            1. Read and understand the issue requirements
+            2. Create a branch named `claude/issue-${{ github.event.issue.number }}` from main
+            3. Implement the changes fully
+            4. Run all relevant linting and type checks to ensure code quality
+            5. Create a PR with a clear description of the changes
+            6. Merge the PR automatically once CI passes
+
+            If you encounter any ambiguity, make reasonable assumptions based on the codebase conventions and proceed with the implementation. This task should not require human input.
+
+  # Blue label - Non-trivial task
+  # Auto-implement on a branch and create a PR for human review
+  blue-nontrivial:
+    if: github.event.label.name == 'blue'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          prompt: |
+            Implement the changes described in this issue. This is a non-trivial task that requires careful implementation and human review.
+
+            Instructions:
+            1. Read and understand the issue requirements thoroughly
+            2. Create a branch named `claude/issue-${{ github.event.issue.number }}` from main
+            3. Implement the changes fully
+            4. Run all relevant linting and type checks to ensure code quality
+            5. Create a PR with a detailed description of:
+               - What was changed and why
+               - Any design decisions made
+               - Testing performed
+            6. Do NOT merge the PR - leave it open for human review
+
+            If you need clarification on any requirements, add a comment to the issue asking specific questions rather than making assumptions on ambiguous requirements.
+
+  # Red label - Complex task
+  # Review, plan, create PR with implementation plan, wait for human approval
+  red-complex:
+    if: github.event.label.name == 'red'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          prompt: |
+            Review this issue and create a detailed implementation plan. This is a complex task that requires human approval before implementation.
+
+            Instructions:
+            1. Read and understand the issue requirements thoroughly
+            2. Analyze the existing codebase to understand the affected areas
+            3. Create a branch named `claude/issue-${{ github.event.issue.number }}` from main
+            4. Create a PR that contains ONLY an implementation plan (as the PR description), not actual code changes. The plan should include:
+               - Summary of the proposed changes
+               - List of files that will be created or modified
+               - Architectural decisions and trade-offs considered
+               - Step-by-step implementation approach
+               - Potential risks or concerns
+               - Estimated scope of changes
+            5. Do NOT implement the actual code changes yet - wait for human approval on the plan
+
+            If you need clarification on any requirements before planning, add a comment to the issue asking specific questions.
+
+  # Black label - Very complex task
+  # Review and provide analysis via issue comments only
+  black-very-complex:
+    if: github.event.label.name == 'black'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          prompt: |
+            Review this issue thoroughly. This is a very complex task that requires deep analysis and human guidance before any implementation.
+
+            Instructions:
+            1. Read and understand the issue requirements thoroughly
+            2. Analyze the existing codebase to understand all affected areas and dependencies
+            3. Add a detailed comment to the issue with:
+               - Your understanding of the requirements (to confirm alignment)
+               - Clarification questions on any ambiguous or underspecified aspects
+               - Potential approaches with pros/cons for each
+               - Identification of risks, edge cases, and potential complications
+               - Suggestions for how to break the task into smaller, manageable pieces
+               - Any relevant existing patterns in the codebase that should be followed
+            4. Do NOT create a branch or PR - only provide analysis via issue comments
+            5. Do NOT implement any code changes
